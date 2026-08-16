@@ -1,55 +1,661 @@
+/**
+ * SIMULATORS - Guia React & Spring Boot API (SENA ADSO)
+ * Simuladores interactivos en vivo: API Tester, CRUD Studio, Mobile Drawer, Hooks Visualizer, JSX Sandbox y Quiz.
+ */
+
 const SIMULATORS = {
     init() {
         this.renderJSXSimulator();
         this.renderPropsSimulator();
-        this.renderSimulator();
-        this.renderHooksSimulator();
-        this.renderQuizSimulator();
-        this.renderDebugSimulator();
-        this.renderRouterArchitect();
-        this.renderRequestLifecycle();
+        this.renderSpringBootApiSimulator();
         this.renderInteractiveCRUD();
+        this.renderMobileLayoutSimulator();
+        this.renderHooksVisualizer();
+        this.renderQuizSimulator();
     },
 
-    // ── JSX Live Editor ──
+    // ══════════════════════════════════════════════════════════════
+    // 1. SPRING BOOT API ENDPOINT TESTER EN VIVO
+    // ══════════════════════════════════════════════════════════════
+    renderSpringBootApiSimulator() {
+        const container = document.querySelector('.sim-api-container');
+        if (!container) return;
+
+        const endpoints = [
+            { method: 'GET', path: '/api/hello', desc: 'Verificar estado del backend', body: '' },
+            { method: 'GET', path: '/api/fincas', desc: 'Listar todas las fincas', body: '' },
+            { 
+                method: 'POST', 
+                path: '/api/fincas', 
+                desc: 'Crear nueva finca', 
+                body: JSON.stringify({
+                    nombre: "Finca El Porvenir",
+                    propietario: "Laura Gómez",
+                    vereda: "El Palmar",
+                    municipio: "Vélez",
+                    hectareas: 14.5
+                }, null, 2) 
+            },
+            { method: 'GET', path: '/api/cultivos', desc: 'Listar cultivos disponibles', body: '' },
+            { 
+                method: 'POST', 
+                path: '/api/cultivos', 
+                desc: 'Crear nuevo cultivo', 
+                body: JSON.stringify({
+                    nombre: "Cacao Criollo",
+                    tipo: "permanente",
+                    cicloDias: 1080
+                }, null, 2) 
+            },
+            { 
+                method: 'POST', 
+                path: '/api/finca-cultivos', 
+                desc: 'Asociar cultivo a finca (N:M)', 
+                body: JSON.stringify({
+                    fincaId: 1,
+                    cultivoId: 2,
+                    areaSembradaHa: 5.0,
+                    fechaSiembra: "2026-03-15",
+                    temporada: "Primer Semestre",
+                    estado: "ACTIVO"
+                }, null, 2) 
+            }
+        ];
+
+        container.innerHTML = `
+            <div class="simulator-card glass-panel">
+                <div class="sim-header">
+                    <h3><span>⚡</span> Spring Boot Endpoint Tester (Puerto 31026)</h3>
+                    <span class="sim-tag">REST Client</span>
+                </div>
+                <div class="sim-body">
+                    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;">
+                        Prueba cómo tu aplicación React realiza peticiones HTTP a la API de Spring Boot y recibe respuestas JSON.
+                    </p>
+                    <div class="sim-split">
+                        <div class="form-group">
+                            <label>Seleccionar Endpoint:</label>
+                            <select id="api-sim-endpoint" class="form-control">
+                                ${endpoints.map((ep, i) => `<option value="${i}">[${ep.method}] ${ep.path} — ${ep.desc}</option>`).join('')}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Servidor Destino:</label>
+                            <input type="text" id="api-sim-host" class="form-control" value="http://localhost:31026" readonly style="color:var(--accent-spring);font-family:monospace;">
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="api-sim-body-group" style="display:none;">
+                        <label>Payload JSON (Cuerpo de la petición):</label>
+                        <textarea id="api-sim-body" class="sim-textarea" rows="5" spellcheck="false"></textarea>
+                    </div>
+
+                    <div style="margin: 1rem 0; display:flex; gap:0.75rem; flex-wrap:wrap;">
+                        <button class="btn btn-spring" id="api-sim-send-btn" onclick="SIMULATORS.executeApiCall()">
+                            🚀 Enviar Petición Fetch
+                        </button>
+                        <button class="btn btn-secondary" onclick="SIMULATORS.toggleMockRealMode()">
+                            <span id="api-mode-label">Modo: Simulado (Respuesta Instantánea)</span>
+                        </button>
+                    </div>
+
+                    <div class="sim-preview" style="margin-top:1rem;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                            <strong style="font-size:0.85rem;color:var(--text-muted);">Respuesta HTTP de Spring Boot:</strong>
+                            <span id="api-sim-status" class="status-badge status-200">200 OK</span>
+                        </div>
+                        <pre id="api-sim-response" style="font-family:'JetBrains Mono',monospace;font-size:0.85rem;color:#7dd3fc;white-space:pre-wrap;margin:0;max-height:220px;overflow-y:auto;"></pre>
+                    </div>
+                </div>
+                <div class="sim-footer" style="margin-top:1rem;display:flex;justify-content:space-between;align-items:center;">
+                    <small style="color:var(--text-dim);">💡 React procesa esta respuesta con <code>await response.json()</code> y actualiza el estado.</small>
+                </div>
+            </div>
+        `;
+
+        this.endpointsData = endpoints;
+        this.apiRealMode = false;
+
+        const select = document.getElementById('api-sim-endpoint');
+        if (select) {
+            select.addEventListener('change', (e) => {
+                const ep = this.endpointsData[e.target.value];
+                const bodyGroup = document.getElementById('api-sim-body-group');
+                const bodyArea = document.getElementById('api-sim-body');
+                if (ep.method === 'POST' || ep.method === 'PUT') {
+                    bodyGroup.style.display = 'block';
+                    bodyArea.value = ep.body;
+                } else {
+                    bodyGroup.style.display = 'none';
+                }
+            });
+        }
+    },
+
+    toggleMockRealMode() {
+        this.apiRealMode = !this.apiRealMode;
+        const label = document.getElementById('api-mode-label');
+        if (label) {
+            label.textContent = this.apiRealMode ? 'Modo: Real (Llamada a http://localhost:31026)' : 'Modo: Simulado (Respuesta Instantánea)';
+        }
+        if (window.APP && window.APP.showToast) {
+            window.APP.showToast(`Modo cambiado a: ${this.apiRealMode ? 'Conexión Real' : 'Simulación'}`, 'info');
+        }
+    },
+
+    async executeApiCall() {
+        const select = document.getElementById('api-sim-endpoint');
+        const responsePre = document.getElementById('api-sim-response');
+        const statusBadge = document.getElementById('api-sim-status');
+        const bodyArea = document.getElementById('api-sim-body');
+        const sendBtn = document.getElementById('api-sim-send-btn');
+        if (!select || !responsePre) return;
+
+        const ep = this.endpointsData[select.value];
+        sendBtn.disabled = true;
+        sendBtn.textContent = '⏳ Conectando...';
+
+        if (this.apiRealMode) {
+            try {
+                const host = 'http://localhost:31026';
+                const opts = {
+                    method: ep.method,
+                    headers: { 'Content-Type': 'application/json' }
+                };
+                if ((ep.method === 'POST' || ep.method === 'PUT') && bodyArea.value) {
+                    opts.body = bodyArea.value;
+                }
+                const res = await fetch(`${host}${ep.path}`, opts);
+                const data = await res.json().catch(() => ({}));
+                statusBadge.textContent = `${res.status} ${res.statusText}`;
+                statusBadge.className = `status-badge ${res.ok ? 'status-200' : 'status-400'}`;
+                responsePre.textContent = JSON.stringify(data, null, 2);
+            } catch (err) {
+                statusBadge.textContent = 'Error de Conexión (CORS o Servidor apagado)';
+                statusBadge.className = 'status-badge status-400';
+                responsePre.textContent = `❌ No se pudo conectar con Spring Boot en http://localhost:31026\nCausa: ${err.message}\n\n💡 Tip: Puedes activar el modo simulado o asegurarte de que tu backend Spring esté corriendo con .\\mvnw spring-boot:run`;
+            }
+        } else {
+            // MOCK RESPONSES
+            await new Promise(r => setTimeout(r, 400));
+            if (ep.path === '/api/hello') {
+                statusBadge.textContent = '200 OK';
+                statusBadge.className = 'status-badge status-200';
+                responsePre.textContent = JSON.stringify({ mensaje: "API Fincas y Cultivos SENA ADSO operativa", timestamp: new Date().toISOString() }, null, 2);
+            } else if (ep.path === '/api/fincas' && ep.method === 'GET') {
+                statusBadge.textContent = '200 OK';
+                statusBadge.className = 'status-badge status-200';
+                responsePre.textContent = JSON.stringify([
+                    { id: 1, nombre: "Finca La Esperanza", propietario: "Carlos Rueda", vereda: "El Gualilo", municipio: "Vélez", hectareas: 15.0 },
+                    { id: 2, nombre: "Finca La Floresta", propietario: "María Gómez", vereda: "San José", municipio: "Vélez", hectareas: 8.0 },
+                    { id: 3, nombre: "Finca El Roble", propietario: "Andrés Silva", vereda: "Zavala", municipio: "Barbosa", hectareas: 22.0 }
+                ], null, 2);
+            } else if (ep.path === '/api/fincas' && ep.method === 'POST') {
+                statusBadge.textContent = '201 Created';
+                statusBadge.className = 'status-badge status-201';
+                let parsed = { nombre: "Finca El Porvenir", propietario: "Laura Gómez", vereda: "El Palmar", municipio: "Vélez", hectareas: 14.5 };
+                try { parsed = JSON.parse(bodyArea.value); } catch(e){}
+                responsePre.textContent = JSON.stringify({ id: 4, ...parsed, fechaCreacion: new Date().toISOString() }, null, 2);
+            } else if (ep.path === '/api/cultivos') {
+                statusBadge.textContent = '200 OK';
+                statusBadge.className = 'status-badge status-200';
+                responsePre.textContent = JSON.stringify([
+                    { id: 1, nombre: "Guayaba Manzana", tipo: "permanente", cicloDias: 365 },
+                    { id: 2, nombre: "Café Arábica", tipo: "permanente", cicloDias: 365 },
+                    { id: 3, nombre: "Frijol", tipo: "transitorio", cicloDias: 120 }
+                ], null, 2);
+            } else if (ep.path === '/api/finca-cultivos') {
+                statusBadge.textContent = '201 Created';
+                statusBadge.className = 'status-badge status-201';
+                responsePre.textContent = JSON.stringify({
+                    id: 10,
+                    finca: { id: 1, nombre: "Finca La Esperanza" },
+                    cultivo: { id: 2, nombre: "Café Arábica" },
+                    areaSembradaHa: 5.0,
+                    temporada: "Primer Semestre",
+                    estado: "ACTIVO"
+                }, null, 2);
+            }
+        }
+
+        sendBtn.disabled = false;
+        sendBtn.textContent = '🚀 Enviar Petición Fetch';
+        if (window.GAMIFICATION) {
+            window.GAMIFICATION.addXP(75, 'Llamada HTTP a Spring Boot probada');
+        }
+        if (window.APP && window.APP.showToast) {
+            window.APP.showToast('Petición completada y estado actualizado', 'success');
+        }
+    },
+
+    // ══════════════════════════════════════════════════════════════
+    // 2. CRUD STUDIO INTERACTIVO (MODALES Y TOASTS EN VIVO)
+    // ══════════════════════════════════════════════════════════════
+    renderInteractiveCRUD() {
+        const container = document.querySelector('.sim-crud-container');
+        if (!container) return;
+
+        this.crudData = [
+            { id: 1, nombre: "Finca La Esperanza", propietario: "Carlos Rueda", vereda: "El Gualilo", municipio: "Vélez", hectareas: 15.0 },
+            { id: 2, nombre: "Finca La Floresta", propietario: "María Gómez", vereda: "San José", municipio: "Vélez", hectareas: 8.0 },
+            { id: 3, nombre: "Finca El Roble", propietario: "Andrés Silva", vereda: "Zavala", municipio: "Barbosa", hectareas: 22.0 }
+        ];
+
+        container.innerHTML = `
+            <div class="simulator-card glass-panel">
+                <div class="sim-header">
+                    <h3><span>📊</span> CRUD Studio en Vivo (React State + Modal + Toasts)</h3>
+                    <button class="btn btn-sm btn-primary" onclick="SIMULATORS.openCrudModal()">➕ Nueva Finca</button>
+                </div>
+                <div class="sim-body">
+                    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;">
+                        Interactúa con este componente completo: crea fincas con el modal, edítalas, elimínalas y observa cómo se disparan los <strong>Mensajes Flotantes (Toasts)</strong> y se actualiza la tabla reactivamente.
+                    </p>
+
+                    <div style="display:flex; gap:0.5rem; margin-bottom:1rem; flex-wrap:wrap;">
+                        <button class="btn btn-sm btn-secondary" onclick="SIMULATORS.setCrudState('ok')">🟢 Estado: Con Datos</button>
+                        <button class="btn btn-sm btn-secondary" onclick="SIMULATORS.setCrudState('loading')">⏳ Estado: Cargando</button>
+                        <button class="btn btn-sm btn-secondary" onclick="SIMULATORS.setCrudState('empty')">📭 Estado: Vacío</button>
+                        <button class="btn btn-sm btn-secondary" onclick="SIMULATORS.setCrudState('error')">❌ Estado: Error</button>
+                    </div>
+
+                    <div id="sim-crud-view"></div>
+                </div>
+            </div>
+
+            <!-- MODAL INTERACTIVO DENTRO DEL SIMULADOR -->
+            <div id="sim-crud-modal" class="modal-overlay">
+                <div class="modal-content glass-panel">
+                    <div class="modal-header">
+                        <h3 id="sim-crud-modal-title">➕ Registrar Finca</h3>
+                        <button class="modal-close-btn" onclick="SIMULATORS.closeCrudModal()">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="sim-crud-id">
+                        <div class="form-group">
+                            <label>Nombre de la Finca *</label>
+                            <input type="text" id="sim-crud-nombre" class="form-control" placeholder="Ej. Finca El Edén">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Propietario *</label>
+                                <input type="text" id="sim-crud-propietario" class="form-control" placeholder="Ej. Camilo Torres">
+                            </div>
+                            <div class="form-group">
+                                <label>Hectáreas *</label>
+                                <input type="number" id="sim-crud-ha" class="form-control" placeholder="Ej. 10.5" step="0.1">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Vereda *</label>
+                                <input type="text" id="sim-crud-vereda" class="form-control" placeholder="Ej. Peña Blanca">
+                            </div>
+                            <div class="form-group">
+                                <label>Municipio</label>
+                                <select id="sim-crud-muni" class="form-control">
+                                    <option value="Vélez">Vélez</option>
+                                    <option value="Barbosa">Barbosa</option>
+                                    <option value="Guavatá">Guavatá</option>
+                                    <option value="Puente Nacional">Puente Nacional</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" onclick="SIMULATORS.closeCrudModal()">Cancelar</button>
+                        <button class="btn btn-primary" onclick="SIMULATORS.saveCrudItem()">💾 Guardar Finca</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        this.renderCrudTable();
+    },
+
+    setCrudState(state) {
+        const view = document.getElementById('sim-crud-view');
+        if (!view) return;
+
+        if (state === 'loading') {
+            view.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--accent-primary);"><span style="font-size:1.5rem;">⏳</span><p>Consultando GET /api/fincas en Spring Boot...</p></div>';
+        } else if (state === 'empty') {
+            view.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text-muted);border:1px dashed var(--glass-border);border-radius:var(--radius-md);">📭 No hay fincas registradas aún. ¡Crea la primera con el botón de arriba!</div>';
+        } else if (state === 'error') {
+            view.innerHTML = '<div style="padding:1.5rem;color:#fca5a5;background:rgba(244,63,94,0.1);border:1px solid rgba(244,63,94,0.3);border-radius:var(--radius-md);">❌ Error 500: Fallo de conexión con la base de datos PostgreSQL en el puerto 5434.</div>';
+        } else {
+            this.renderCrudTable();
+        }
+    },
+
+    renderCrudTable() {
+        const view = document.getElementById('sim-crud-view');
+        if (!view) return;
+
+        if (this.crudData.length === 0) {
+            this.setCrudState('empty');
+            return;
+        }
+
+        view.innerHTML = `
+            <div class="table-container">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Finca</th>
+                            <th>Propietario</th>
+                            <th>Ubicación</th>
+                            <th>Área</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${this.crudData.map(f => `
+                            <tr>
+                                <td data-label="ID">#${f.id}</td>
+                                <td data-label="Finca"><strong>${f.nombre}</strong></td>
+                                <td data-label="Propietario">${f.propietario}</td>
+                                <td data-label="Ubicación">${f.vereda}, ${f.municipio}</td>
+                                <td data-label="Área"><span class="badge-ha">${f.hectareas} ha</span></td>
+                                <td data-label="Acciones">
+                                    <div style="display:flex;gap:0.4rem;">
+                                        <button class="btn btn-sm btn-primary" onclick="SIMULATORS.editCrudItem(${f.id})">✏️</button>
+                                        <button class="btn btn-sm btn-danger" onclick="SIMULATORS.deleteCrudItem(${f.id})">🗑️</button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    },
+
+    openCrudModal(finca = null) {
+        const modal = document.getElementById('sim-crud-modal');
+        const title = document.getElementById('sim-crud-modal-title');
+        const idInput = document.getElementById('sim-crud-id');
+        const nomInput = document.getElementById('sim-crud-nombre');
+        const propInput = document.getElementById('sim-crud-propietario');
+        const haInput = document.getElementById('sim-crud-ha');
+        const verInput = document.getElementById('sim-crud-vereda');
+        const munInput = document.getElementById('sim-crud-muni');
+        if (!modal) return;
+
+        if (finca) {
+            title.textContent = `✏️ Editar Finca #${finca.id}`;
+            idInput.value = finca.id;
+            nomInput.value = finca.nombre;
+            propInput.value = finca.propietario;
+            haInput.value = finca.hectareas;
+            verInput.value = finca.vereda;
+            munInput.value = finca.municipio;
+        } else {
+            title.textContent = '➕ Registrar Nueva Finca';
+            idInput.value = '';
+            nomInput.value = '';
+            propInput.value = '';
+            haInput.value = '';
+            verInput.value = '';
+            munInput.value = 'Vélez';
+        }
+        modal.classList.add('active');
+    },
+
+    closeCrudModal() {
+        const modal = document.getElementById('sim-crud-modal');
+        if (modal) modal.classList.remove('active');
+    },
+
+    editCrudItem(id) {
+        const item = this.crudData.find(f => f.id === id);
+        if (item) this.openCrudModal(item);
+    },
+
+    deleteCrudItem(id) {
+        if (!confirm('¿Deseas eliminar esta finca del sistema?')) return;
+        this.crudData = this.crudData.filter(f => f.id !== id);
+        this.renderCrudTable();
+        if (window.APP && window.APP.showToast) {
+            window.APP.showToast('Finca eliminada de la base de datos (DELETE 204)', 'warning');
+        }
+    },
+
+    saveCrudItem() {
+        const id = document.getElementById('sim-crud-id').value;
+        const nombre = document.getElementById('sim-crud-nombre').value.trim();
+        const propietario = document.getElementById('sim-crud-propietario').value.trim();
+        const hectareas = parseFloat(document.getElementById('sim-crud-ha').value);
+        const vereda = document.getElementById('sim-crud-vereda').value.trim();
+        const municipio = document.getElementById('sim-crud-muni').value;
+
+        if (!nombre || !propietario || isNaN(hectareas)) {
+            if (window.APP && window.APP.showToast) {
+                window.APP.showToast('Por favor completa todos los campos requeridos (*)', 'error');
+            }
+            return;
+        }
+
+        if (id) {
+            // Actualizar
+            const idx = this.crudData.findIndex(f => f.id === parseInt(id, 10));
+            if (idx !== -1) {
+                this.crudData[idx] = { id: parseInt(id, 10), nombre, propietario, hectareas, vereda, municipio };
+            }
+            if (window.APP && window.APP.showToast) {
+                window.APP.showToast(`Finca "${nombre}" actualizada con éxito (PUT 200)`, 'success');
+            }
+        } else {
+            // Crear nuevo
+            const newId = this.crudData.length > 0 ? Math.max(...this.crudData.map(f => f.id)) + 1 : 1;
+            this.crudData.push({ id: newId, nombre, propietario, hectareas, vereda, municipio });
+            if (window.APP && window.APP.showToast) {
+                window.APP.showToast(`Finca "${nombre}" creada en PostgreSQL (POST 201)`, 'success');
+            }
+        }
+
+        this.closeCrudModal();
+        this.renderCrudTable();
+        if (window.GAMIFICATION) {
+            window.GAMIFICATION.addXP(100, 'Operación CRUD completada en el simulador');
+        }
+    },
+
+    // ══════════════════════════════════════════════════════════════
+    // 3. SIMULADOR DE MENÚ HAMBURGUESA & MOBILE-FIRST LAYOUT
+    // ══════════════════════════════════════════════════════════════
+    renderMobileLayoutSimulator() {
+        const container = document.querySelector('.sim-layout-container');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div class="simulator-card glass-panel">
+                <div class="sim-header">
+                    <h3><span>📱</span> Simulador Mobile-First y Menú Hamburguesa</h3>
+                    <div style="display:flex;gap:0.4rem;">
+                        <button class="btn btn-sm btn-secondary" onclick="SIMULATORS.setDeviceWidth('375px')">📱 375px</button>
+                        <button class="btn btn-sm btn-secondary" onclick="SIMULATORS.setDeviceWidth('768px')">💻 768px</button>
+                        <button class="btn btn-sm btn-secondary" onclick="SIMULATORS.setDeviceWidth('100%')">🖥️ 100%</button>
+                    </div>
+                </div>
+                <div class="sim-body">
+                    <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1rem;">
+                        Prueba la interacción del botón hamburguesa: al hacer clic, los 3 trazos se transforman en una <strong>X</strong> y el menú lateral se desliza con backdrop desenfocado.
+                    </p>
+
+                    <div id="device-preview-frame" style="width:375px; max-width:100%; margin:0 auto; border:2px solid var(--glass-border); border-radius:var(--radius-lg); overflow:hidden; background:var(--bg-primary); transition:width 0.3s ease; box-shadow:var(--shadow-lg);">
+                        <!-- Barra de App Simulada -->
+                        <div style="padding:0.75rem 1rem; background:rgba(17,24,39,0.9); border-bottom:1px solid var(--glass-border); display:flex; justify-content:space-between; align-items:center; position:relative;">
+                            <div style="font-weight:700; font-size:0.9rem; color:var(--text-main);">🌿 AgroManager</div>
+                            <button id="sim-burger-btn" onclick="SIMULATORS.toggleSimDrawer()" style="background:rgba(255,255,255,0.06); border:1px solid var(--glass-border); border-radius:6px; color:white; width:34px; height:34px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:1.1rem;">
+                                ☰
+                            </button>
+                        </div>
+
+                        <!-- Mini Contenido de la Pantalla -->
+                        <div style="padding:1rem; position:relative; min-height:220px;">
+                            <h4 style="font-size:0.95rem; margin-bottom:0.4rem;">Panel Principal</h4>
+                            <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.75rem;">Fincas activas: 3 | Cultivos: 5</p>
+                            <div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:8px; padding:0.75rem; font-size:0.8rem;">
+                                🏡 Finca La Esperanza — 15 ha
+                            </div>
+
+                            <!-- Drawer Móvil Simulado -->
+                            <div id="sim-drawer-menu" style="position:absolute; top:0; left:0; width:70%; height:100%; background:rgba(11,15,25,0.98); border-right:1px solid var(--glass-border); padding:1rem; transform:translateX(-100%); transition:transform 0.3s ease; z-index:10; display:flex; flex-direction:column; gap:0.6rem;">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                                    <strong style="font-size:0.85rem; color:var(--accent-primary);">Navegación</strong>
+                                    <button onclick="SIMULATORS.toggleSimDrawer()" style="background:none;border:none;color:white;cursor:pointer;font-size:1.1rem;">×</button>
+                                </div>
+                                <a href="javascript:void(0)" onclick="SIMULATORS.toggleSimDrawer()" style="color:white; text-decoration:none; font-size:0.85rem; padding:0.4rem; border-radius:4px; background:rgba(56,189,248,0.1);">🏡 Fincas</a>
+                                <a href="javascript:void(0)" onclick="SIMULATORS.toggleSimDrawer()" style="color:var(--text-muted); text-decoration:none; font-size:0.85rem; padding:0.4rem;">🌱 Cultivos</a>
+                                <a href="javascript:void(0)" onclick="SIMULATORS.toggleSimDrawer()" style="color:var(--text-muted); text-decoration:none; font-size:0.85rem; padding:0.4rem;">🔄 Siembra N:M</a>
+                            </div>
+                            <div id="sim-drawer-backdrop" onclick="SIMULATORS.toggleSimDrawer()" style="position:absolute; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); display:none; z-index:5;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    setDeviceWidth(width) {
+        const frame = document.getElementById('device-preview-frame');
+        if (frame) frame.style.width = width;
+    },
+
+    toggleSimDrawer() {
+        const drawer = document.getElementById('sim-drawer-menu');
+        const backdrop = document.getElementById('sim-drawer-backdrop');
+        const btn = document.getElementById('sim-burger-btn');
+        if (!drawer || !backdrop) return;
+
+        const isOpen = drawer.style.transform === 'translateX(0px)';
+        drawer.style.transform = isOpen ? 'translateX(-100%)' : 'translateX(0px)';
+        backdrop.style.display = isOpen ? 'none' : 'block';
+        btn.textContent = isOpen ? '☰' : '✕';
+    },
+
+    // ══════════════════════════════════════════════════════════════
+    // 4. VISUALIZADOR DE USESTATE & USEEFFECT
+    // ══════════════════════════════════════════════════════════════
+    renderHooksVisualizer() {
+        const container = document.querySelector('.sim-hooks-container');
+        if (!container) return;
+
+        this.hookCounter = 0;
+        this.hookFincaId = 1;
+
+        container.innerHTML = `
+            <div class="simulator-card glass-panel">
+                <div class="sim-header">
+                    <h3><span>🔄</span> Visualizador del Ciclo de Vida (useState & useEffect)</h3>
+                </div>
+                <div class="sim-body">
+                    <div class="sim-split">
+                        <div style="background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); border-radius:var(--radius-md); padding:1rem;">
+                            <h4>Estado del Componente</h4>
+                            <p style="margin:0.5rem 0; font-size:0.9rem;">
+                                <code>const [contador, setContador] = useState(<span id="vis-count">0</span>)</code>
+                            </p>
+                            <p style="margin:0.5rem 0; font-size:0.9rem;">
+                                <code>const [fincaId, setFincaId] = useState(<span id="vis-fincaid">1</span>)</code>
+                            </p>
+                            <div style="display:flex;gap:0.5rem;margin-top:1rem;">
+                                <button class="btn btn-sm btn-primary" onclick="SIMULATORS.incrementHookCount()">+1 Contador</button>
+                                <button class="btn btn-sm btn-spring" onclick="SIMULATORS.changeHookFinca()">Cambiar Finca ID</button>
+                            </div>
+                        </div>
+
+                        <div style="background:#0d1117; border:1px solid var(--glass-border); border-radius:var(--radius-md); padding:1rem;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+                                <strong style="font-size:0.8rem; color:var(--text-muted);">Consola de Eventos del Hook:</strong>
+                                <button class="btn btn-sm btn-secondary" onclick="SIMULATORS.clearHookLog()" style="padding:0.15rem 0.5rem;font-size:0.7rem;">Limpiar</button>
+                            </div>
+                            <div id="hook-console-log" style="font-family:'JetBrains Mono',monospace; font-size:0.78rem; max-height:140px; overflow-y:auto; color:#a7f3d0; line-height:1.5;">
+                                <div>[1] 🟢 Componente montado -> Ejecutando useEffect([], [])</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    },
+
+    logHookEvent(msg, color = '#a7f3d0') {
+        const consoleBox = document.getElementById('hook-console-log');
+        if (!consoleBox) return;
+        const entry = document.createElement('div');
+        entry.style.color = color;
+        entry.textContent = `[${new Date().toLocaleTimeString('es-CO')}] ${msg}`;
+        consoleBox.appendChild(entry);
+        consoleBox.scrollTop = consoleBox.scrollHeight;
+    },
+
+    incrementHookCount() {
+        this.hookCounter++;
+        const cSpan = document.getElementById('vis-count');
+        if (cSpan) cSpan.textContent = this.hookCounter;
+        this.logHookEvent(`🔄 Re-render por setContador(${this.hookCounter})`, '#7dd3fc');
+    },
+
+    changeHookFinca() {
+        this.hookFincaId++;
+        const fSpan = document.getElementById('vis-fincaid');
+        if (fSpan) fSpan.textContent = this.hookFincaId;
+        this.logHookEvent(`🧹 Cleanup de petición previa para Finca ID: ${this.hookFincaId - 1}`, '#fcd34d');
+        this.logHookEvent(`⚡ Disparando useEffect([fincaId]) -> Fetch a /api/fincas/${this.hookFincaId}`, '#a7f3d0');
+    },
+
+    clearHookLog() {
+        const consoleBox = document.getElementById('hook-console-log');
+        if (consoleBox) consoleBox.innerHTML = '<div>Consola lista. Modifica el estado arriba.</div>';
+    },
+
+    // ══════════════════════════════════════════════════════════════
+    // 5. JSX LIVE EDITOR
+    // ══════════════════════════════════════════════════════════════
     renderJSXSimulator() {
         const containers = document.querySelectorAll('.sim-routes-container');
         containers.forEach(container => {
             container.innerHTML = `
                 <div class="simulator-card glass-panel">
-                    <div class="sim-header"><span class="sim-icon">&#9889;</span><h3>JSX Live Editor</h3></div>
+                    <div class="sim-header"><span class="sim-icon">⚡</span><h3>JSX Live Editor</h3></div>
                     <div class="sim-body">
                         <div class="sim-input-group"><label>JSX:</label>
-                        <textarea id="jsx-input" class="sim-textarea" spellcheck="false" style="min-height:80px;">&lt;h1&gt;Hola React!&lt;/h1&gt;
-&lt;p style={{color: 'blue'}}&gt;Esto es JSX&lt;/p&gt;</textarea></div>
+                        <textarea id="jsx-input" class="sim-textarea" spellcheck="false" style="min-height:80px;">&lt;div className="finca-badge"&gt;
+  &lt;h2&gt;Finca La Esperanza&lt;/h2&gt;
+  &lt;p&gt;Hectáreas: 15.0&lt;/p&gt;
+&lt;/div&gt;</textarea></div>
                         <div class="sim-output" style="margin-top:10px;">
-                            <div class="code-header">Compilado a JavaScript:</div>
-                            <div id="jsx-output" class="browser-preview" style="color:var(--text-muted);font-size:0.8rem;">React.createElement("h1", null, "Hola React!")</div>
+                            <div class="code-header" style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.25rem;">Compilado a JavaScript puro (Virtual DOM):</div>
+                            <div id="jsx-output" class="browser-preview" style="color:var(--accent-primary);font-family:monospace;font-size:0.82rem;background:rgba(0,0,0,0.3);padding:0.75rem;border-radius:6px;"></div>
                         </div>
                     </div>
-                    <div class="sim-footer">
+                    <div class="sim-footer" style="margin-top:0.75rem;">
                         <button class="btn btn-primary" onclick="SIMULATORS.checkJSX()">Compilar +50 XP</button>
                     </div>
                 </div>
             `;
             const input = container.querySelector('#jsx-input');
-            if (input) input.addEventListener('input', (e) => this.updateJSX(e.target.value));
+            if (input) {
+                input.addEventListener('input', (e) => this.updateJSX(e.target.value));
+                this.updateJSX(input.value);
+            }
         });
     },
 
     updateJSX(jsx) {
         const output = document.getElementById('jsx-output');
         if (!output) return;
-        const matchH1 = jsx.match(/<h1[^>]*>([^<]*)<\/h1>/);
-        const matchP = jsx.match(/<p[^>]*>([^<]*)<\/p>/);
-        let result = '// JSX compilado a React.createElement\n';
-        if (matchH1) result += `React.createElement("h1", null, "${matchH1[1]}")`;
-        if (matchP) result += `\nReact.createElement("p", {style: {color: 'blue'}}, "${matchP[1]}")`;
-        output.textContent = result || '// Escribe JSX para compilar';
+        output.textContent = `// React 19 / JSX Transform\nimport { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";\n\n_jsxs("div", {\n  className: "finca-badge",\n  children: [\n    _jsx("h2", { children: "Finca La Esperanza" }),\n    _jsx("p", { children: "Hectáreas: 15.0" })\n  ]\n});`;
     },
 
     checkJSX() {
-        if (window.GAMIFICATION) { if (window.confetti) confetti({ particleCount: 50, spread: 50 }); window.GAMIFICATION.addXP(50, 'JSX compilado'); }
+        if (window.GAMIFICATION) {
+            if (window.confetti) confetti({ particleCount: 50, spread: 50 });
+            window.GAMIFICATION.addXP(50, 'JSX compilado');
+        }
     },
 
     // ── Props Simulator ──
@@ -58,507 +664,125 @@ const SIMULATORS = {
         containers.forEach(container => {
             container.innerHTML = `
                 <div class="simulator-card glass-panel">
-                    <div class="sim-header"><span class="sim-icon">&#128230;</span><h3>Props Simulator</h3></div>
+                    <div class="sim-header"><span class="sim-icon">📦</span><h3>Props Simulator</h3></div>
                     <div class="sim-body">
                         <div class="sim-split">
-                            <div><label>Componente:</label>
-                            <textarea id="props-component" class="sim-textarea" spellcheck="false" style="min-height:80px;">function Saludo({ nombre, edad }) {
-  return &lt;div&gt;
-    &lt;h2&gt;Hola, {nombre}!&lt;/h2&gt;
-    &lt;p&gt;Edad: {edad}&lt;/p&gt;
+                            <div><label>Componente FincaCard:</label>
+                            <textarea id="props-component" class="sim-textarea" spellcheck="false" style="min-height:80px;">function FincaCard({ nombre, hectareas }) {
+  return &lt;div className="card"&gt;
+    &lt;h3&gt;{nombre}&lt;/h3&gt;
+    &lt;p&gt;Área: {hectareas} ha&lt;/p&gt;
   &lt;/div&gt;
 }</textarea></div>
                             <div><label>Props (JSON):</label>
                             <textarea id="props-json" class="sim-textarea" spellcheck="false" style="min-height:80px;">{
-  "nombre": "Ana",
-  "edad": 25
+  "nombre": "Finca La Floresta",
+  "hectareas": 8.0
 }</textarea></div>
                         </div>
                         <div class="sim-output" style="margin-top:10px;">
-                            <div class="code-header">Renderizado:</div>
-                            <div id="props-output" class="browser-preview"></div>
+                            <div class="code-header" style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.25rem;">Renderizado resultante:</div>
+                            <div id="props-output" class="browser-preview" style="background:rgba(255,255,255,0.03);padding:1rem;border-radius:8px;border:1px solid var(--glass-border);"></div>
                         </div>
-                    </div>
-                    <div class="sim-footer">
-                        <button class="btn btn-primary" onclick="SIMULATORS.checkProps()">Renderizar +50 XP</button>
                     </div>
                 </div>
             `;
             const input = document.getElementById('props-json');
-            const comp = document.getElementById('props-component');
-            if (input && comp) {
-                const update = () => this.updateProps(comp.value, input.value);
+            if (input) {
+                const update = () => {
+                    try {
+                        const parsed = JSON.parse(input.value);
+                        const out = document.getElementById('props-output');
+                        if (out) out.innerHTML = `<h4>🏡 ${parsed.nombre || 'Finca'}</h4><p>Área: <strong>${parsed.hectareas || 0} ha</strong></p>`;
+                    } catch(e){}
+                };
                 input.addEventListener('input', update);
-                comp.addEventListener('input', update);
+                update();
             }
         });
     },
 
-    updateProps(component, jsonStr) {
-        const output = document.getElementById('props-output');
-        if (!output) return;
-        try {
-            const props = JSON.parse(jsonStr);
-            let result = component;
-            Object.entries(props).forEach(([k, v]) => {
-                result = result.replace(new RegExp(`\\{${k}\\}`, 'g'), v);
-            });
-            result = result.replace(/<\/?[^>]+>/g, m => m);
-            output.innerHTML = `<div style="padding:10px;border:1px solid var(--glass-border);border-radius:6px;">${result}</div>`;
-        } catch (e) {
-            output.innerHTML = 'JSON invalido';
-        }
-    },
-
-    checkProps() {
-        if (window.GAMIFICATION) { if (window.confetti) confetti({ particleCount: 50, spread: 50 }); window.GAMIFICATION.addXP(50, 'Props renderizadas'); }
-    },
-
-    // ── State Simulator ──
-    renderSimulator() {
-        const containers = document.querySelectorAll('.sim-orm-container');
-        containers.forEach(container => {
-            let count = 0;
-            container.innerHTML = `
-                <div class="simulator-card glass-panel">
-                    <div class="sim-header"><span class="sim-icon">&#128204;</span><h3>useState Simulator</h3></div>
-                    <div class="sim-body">
-                        <div class="sim-input-group"><label>Valor actual del estado:</label>
-                        <div class="browser-preview" id="state-value" style="font-size:1.5rem;text-align:center;">${count}</div></div>
-                        <div style="display:flex;gap:10px;margin-top:10px;">
-                            <button class="btn btn-primary" onclick="SIMULATORS.setState(${count + 1})">setCount(${count + 1})</button>
-                            <button class="btn btn-secondary" onclick="SIMULATORS.setState(${count - 1})">setCount(${count - 1})</button>
-                            <button class="btn btn-secondary" onclick="SIMULATORS.setState(0)">Reset</button>
-                        </div>
-                        <div class="sim-output" style="margin-top:10px;">
-                            <div class="code-header">Codigo equivalente:</div>
-                            <pre><code class="language-jsx">const [count, setCount] = useState(${count})</code></pre>
-                        </div>
-                    </div>
-                    <div class="sim-footer">
-                        <button class="btn btn-primary" onclick="SIMULATORS.checkState()">Validar +50 XP</button>
-                    </div>
-                </div>
-            `;
-            this.stateCount = count;
-        });
-    },
-
-    setState(val) {
-        const el = document.getElementById('state-value');
-        if (el) {
-            this.stateCount = val;
-            el.textContent = val;
-            const code = document.querySelector('.sim-orm-container pre code');
-            if (code) code.textContent = `const [count, setCount] = useState(${val})`;
-        }
-    },
-
-    checkState() {
-        if (window.GAMIFICATION) { if (window.confetti) confetti({ particleCount: 50, spread: 50 }); window.GAMIFICATION.addXP(50, 'Estado gestionado'); }
-    },
-
-    // ── Hooks Playground ──
-    renderHooksSimulator() {
-        const containers = document.querySelectorAll('.sim-db-container');
-        containers.forEach(container => {
-            container.innerHTML = `
-                <div class="simulator-card glass-panel">
-                    <div class="sim-header"><span class="sim-icon">&#128640;</span><h3>Hooks Playground</h3></div>
-                    <div class="sim-body">
-                        <div class="sim-input-group"><label>Elige un Hook:</label>
-                        <select id="hook-select" class="sim-select">
-                            <option value="useState">useState - Estado local</option>
-                            <option value="useEffect">useEffect - Efectos secundarios</option>
-                            <option value="useRef">useRef - Referencias DOM</option>
-                            <option value="useMemo">useMemo - Valores memorizados</option>
-                        </select></div>
-                        <div id="hook-output" class="browser-preview" style="margin-top:10px;font-family:monospace;font-size:0.8rem;white-space:pre-wrap;">
-useState:
-const [state, setState] = useState(initialValue)
-                        </div>
-                    </div>
-                    <div class="sim-footer">
-                        <button class="btn btn-primary" onclick="SIMULATORS.checkHook()">Explorar +50 XP</button>
-                    </div>
-                </div>
-            `;
-            const select = container.querySelector('#hook-select');
-            if (select) select.addEventListener('change', () => this.updateHook(select.value));
-        });
-    },
-
-    updateHook(hook) {
-        const output = document.getElementById('hook-output');
-        if (!output) return;
-        const hooks = {
-            useState: `useState:
-const [state, setState] = useState(initialValue)
-
-// Ejemplo:
-const [count, setCount] = useState(0)
-setCount(count + 1)  // Actualiza estado`,
-            useEffect: `useEffect:
-useEffect(() => {
-  // Efecto (se ejecuta tras render)
-  return () => {
-    // Cleanup (al desmontar)
-  }
-}, [dependencies])
-
-// Ejemplo:
-useEffect(() => {
-  fetch('/api/data').then(setData)
-}, [])`,
-            useRef: `useRef:
-const ref = useRef(initialValue)
-
-// Ejemplo:
-const inputRef = useRef(null)
-inputRef.current.focus()  // Acceso DOM`,
-            useMemo: `useMemo:
-const memoValue = useMemo(() => {
-  return computeExpensiveValue(a, b)
-}, [a, b])
-
-// Ejemplo:
-const total = useMemo(() =>
-  items.reduce((sum, i) => sum + i.price, 0),
-  [items]
-)`
-        };
-        output.textContent = hooks[hook] || hooks.useState;
-    },
-
-    checkHook() {
-        if (window.GAMIFICATION) { if (window.confetti) confetti({ particleCount: 50, spread: 50 }); window.GAMIFICATION.addXP(50, 'Hook explorado'); }
-    },
-
-    // ── Quiz ──
+    // ══════════════════════════════════════════════════════════════
+    // 6. QUIZ Y DEBUGGER DE ERRORES COMUNES
+    // ══════════════════════════════════════════════════════════════
     renderQuizSimulator() {
-        const containers = document.querySelectorAll('.sim-quiz-container');
-        containers.forEach(container => this.loadQuiz(container));
-    },
+        const container = document.querySelector('.sim-quiz-container');
+        if (!container) return;
 
-    loadQuiz(container) {
         const questions = [
-            { q: "Que funcion retorna JSX?", a: ["React.createElement()", "document.write()", "innerHTML"], c: 0 },
-            { q: "Como se pasan datos a un componente hijo?", a: ["Props", "State", "Hooks"], c: 0 },
-            { q: "Que Hook se usa para estado local?", a: ["useState", "useEffect", "useRef"], c: 0 },
-            { q: "Que Hook ejecuta codigo tras renderizar?", a: ["useEffect", "useState", "useCallback"], c: 0 }
+            {
+                q: "¿Por qué React exige una prop 'key' única al renderizar elementos con .map()?",
+                options: [
+                    "Para que el Virtual DOM identifique exactamente qué elemento cambió, se agregó o eliminó sin re-renderizar toda la lista.",
+                    "Para ordenar los elementos alfabéticamente de forma automática.",
+                    "Es obligatorio solo por sintaxis de JavaScript pero no afecta el rendimiento."
+                ],
+                correct: 0,
+                feedback: "¡Correcto! Las keys permiten la reconciliación eficiente del Virtual DOM."
+            },
+            {
+                q: "Si tu backend Spring Boot corre en el puerto 31026 y React en el 5173, ¿qué sucede si no configuras CORS?",
+                options: [
+                    "El servidor Spring Boot se apaga automáticamente.",
+                    "El navegador bloquea la respuesta por seguridad aplicando la política de mismo origen (Same-Origin Policy).",
+                    "React transforma la petición en una llamada SOAP."
+                ],
+                correct: 1,
+                feedback: "¡Exacto! CORS es una medida de seguridad implementada por los navegadores."
+            },
+            {
+                q: "¿Cuál es la forma correcta de actualizar un array en el estado de React?",
+                options: [
+                    "fincas.push(nuevaFinca); setFincas(fincas);",
+                    "setFincas(prev => [...prev, nuevaFinca]); (Usando inmutabilidad con spread operator)",
+                    "fincas[0] = nuevaFinca;"
+                ],
+                correct: 1,
+                feedback: "¡Excelente! La inmutabilidad es la regla de oro en React para que detecte el cambio de referencia."
+            }
         ];
-        const random = questions[Math.floor(Math.random() * questions.length)];
+
         container.innerHTML = `
-            <div class="simulator-card glass-panel quiz-card">
-                <div class="sim-header"><span class="sim-icon">&#127918;</span><h3>Quiz React</h3></div>
-                <div class="sim-body">
-                    <p class="quiz-question">${random.q}</p>
-                    <div class="quiz-options">${random.a.map((opt, i) => `<button class="quiz-option-btn glass-panel-inner" onclick="SIMULATORS.answerQuiz(this, ${i === random.c})">${opt}</button>`).join('')}</div>
+            <div class="simulator-card glass-panel">
+                <div class="sim-header">
+                    <h3><span>🧠</span> Quiz de Maestría React + Spring Boot</h3>
                 </div>
-                <div id="quiz-feedback" class="quiz-feedback"></div>
-            </div>`;
+                <div class="sim-body" id="quiz-body">
+                    ${questions.map((item, idx) => `
+                        <div class="quiz-item" style="margin-bottom:1.5rem; padding-bottom:1rem; border-bottom:1px solid var(--glass-border);">
+                            <p style="font-weight:600; margin-bottom:0.75rem;">${idx + 1}. ${item.q}</p>
+                            <div style="display:flex; flex-direction:column; gap:0.5rem;">
+                                ${item.options.map((opt, optIdx) => `
+                                    <button class="btn btn-secondary" style="text-align:left; justify-content:flex-start; padding:0.6rem 0.9rem; font-size:0.85rem;" onclick="SIMULATORS.answerQuiz(${idx}, ${optIdx})">
+                                        ${opt}
+                                    </button>
+                                `).join('')}
+                            </div>
+                            <div id="quiz-fb-${idx}" style="margin-top:0.5rem; font-size:0.85rem; display:none;"></div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        this.quizQuestions = questions;
     },
 
-    answerQuiz(btn, isCorrect) {
-        const feedback = document.getElementById('quiz-feedback');
-        const container = btn.closest('.sim-quiz-container');
-        if (isCorrect) {
-            btn.classList.add('correct');
-            feedback.innerHTML = '<span class="text-success">Correcto! +75 XP</span>';
-            if (window.confetti) confetti({ particleCount: 100, spread: 70 });
-            if (window.GAMIFICATION) window.GAMIFICATION.addXP(75, 'Quiz React');
-            setTimeout(() => this.loadQuiz(container), 2000);
+    answerQuiz(qIdx, optIdx) {
+        const q = this.quizQuestions[qIdx];
+        const fb = document.getElementById(`quiz-fb-${qIdx}`);
+        if (!fb) return;
+
+        fb.style.display = 'block';
+        if (optIdx === q.correct) {
+            fb.className = 'text-success';
+            fb.innerHTML = `✅ ${q.feedback} <strong>+50 XP</strong>`;
+            if (window.GAMIFICATION) window.GAMIFICATION.addXP(50, `Pregunta ${qIdx + 1} del Quiz correcta`);
         } else {
-            btn.classList.add('incorrect');
-            feedback.innerHTML = '<span class="text-error">Intenta de nuevo</span>';
-            setTimeout(() => btn.classList.remove('incorrect'), 1000);
+            fb.className = 'text-error';
+            fb.textContent = '❌ Respuesta incorrecta. Inténtalo de nuevo analizando los conceptos.';
         }
-    },
-
-    // ── Debug ──
-    renderDebugSimulator() {
-        const containers = document.querySelectorAll('.sim-debug-container');
-        containers.forEach(container => this.loadDebug(container));
-    },
-
-    loadDebug(container) {
-        const levels = [
-            { task: "Falta el return en el componente", code: 'function App() {\n  <h1>Hola React</h1>\n}', options: ['return <h1>Hola React</h1>', 'render <h1>Hola React</h1>', '<h1>Hola React</h1>'], correct: 0 },
-            { task: "useState sin importar", code: 'function App() {\n  const [count, setCount] = useState(0)\n}', options: ["import { useState } from 'react'", "import React from 'react'", "const useState = React.useState"], correct: 0 },
-        ];
-        const level = levels[Math.floor(Math.random() * levels.length)];
-        container.innerHTML = `
-            <div class="simulator-card glass-panel debug-card">
-                <div class="sim-header"><span class="sim-icon">&#128027;</span><h3>Debug React</h3></div>
-                <div class="sim-body">
-                    <p class="debug-task"><strong>Bug:</strong> ${level.task}</p>
-                    <pre><code class="language-jsx">${level.code}</code></pre>
-                    <div class="debug-options">${level.options.map((opt, i) => `<button class="quiz-option-btn glass-panel-inner" onclick="SIMULATORS.solveDebug(this, ${i === level.correct})">${opt}</button>`).join('')}</div>
-                </div>
-                <div id="debug-feedback" class="quiz-feedback"></div>
-            </div>`;
-    },
-
-    solveDebug(btn, isCorrect) {
-        const container = btn.closest('.sim-debug-container');
-        const feedback = container.querySelector('.quiz-feedback');
-        if (isCorrect) {
-            btn.classList.add('correct');
-            feedback.innerHTML = '<span class="text-success">Bug arreglado! +100 XP</span>';
-            if (window.confetti) confetti({ particleCount: 150, spread: 100 });
-            if (window.GAMIFICATION) window.GAMIFICATION.addXP(100, 'Bug React solucionado');
-            setTimeout(() => this.loadDebug(container), 2500);
-        } else {
-            btn.classList.add('incorrect');
-            feedback.innerHTML = '<span class="text-error">Sigue intentando...</span>';
-            setTimeout(() => btn.classList.remove('incorrect'), 1000);
-        }
-    },
-
-    // ── Router Architect ──
-    renderRouterArchitect() {
-        const containers = document.querySelectorAll('.sim-arch-container');
-        containers.forEach(container => {
-            container.innerHTML = `
-                <div class="simulator-card glass-panel">
-                    <div class="sim-header"><span class="sim-icon">&#128204;</span><h3>Router Architect</h3></div>
-                    <div class="sim-body">
-                        <p class="quiz-question">Arrastra los componentes a su ubicacion correcta:</p>
-                        <div class="arch-drop-zones" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                            <div class="drop-zone glass-panel-inner" data-type="router">
-                                <div class="zone-label">Router Registry</div>
-                                <div class="zone-content" id="zone-router"></div>
-                            </div>
-                            <div class="drop-zone glass-panel-inner" data-type="provider">
-                                <div class="zone-label">Provider Config</div>
-                                <div class="zone-content" id="zone-provider"></div>
-                            </div>
-                        </div>
-                        <div class="arch-items" style="display: flex; gap: 10px; margin-top: 25px; justify-content: center; flex-wrap: wrap;">
-                            <div class="arch-item glass-panel-inner" draggable="true" ondragstart="SIMULATORS.onDragStart(event)" id="item-router">BrowserRouter</div>
-                            <div class="arch-item glass-panel-inner" draggable="true" ondragstart="SIMULATORS.onDragStart(event)" id="item-provider">Routes + Route</div>
-                        </div>
-                    </div>
-                    <div id="arch-feedback" class="quiz-feedback"></div>
-                </div>
-            `;
-            this.initArchEvents(container);
-        });
-    },
-
-    onDragStart(e) {
-        e.dataTransfer.setData('text/plain', e.target.id);
-    },
-
-    initArchEvents(container) {
-        const zones = container.querySelectorAll('.drop-zone');
-        zones.forEach(zone => {
-            zone.addEventListener('dragover', (e) => e.preventDefault());
-            zone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                const id = e.dataTransfer.getData('text');
-                const item = document.getElementById(id);
-                const type = zone.getAttribute('data-type');
-                
-                if ((type === 'router' && id === 'item-router') || (type === 'provider' && id === 'item-provider')) {
-                    zone.querySelector('.zone-content').appendChild(item);
-                    item.setAttribute('draggable', 'false');
-                    this.checkArchProgress(container);
-                } else {
-                    item.classList.add('shake');
-                    setTimeout(() => item.classList.remove('shake'), 400);
-                }
-            });
-        });
-    },
-
-    checkArchProgress(container) {
-        const itemsInZones = container.querySelectorAll('.zone-content .arch-item').length;
-        if (itemsInZones === 2) {
-            const feedback = container.querySelector('#arch-feedback');
-            feedback.innerHTML = '<span class="text-success">Arquitectura React Router validada! +150 XP</span>';
-            if (window.confetti) confetti({ particleCount: 200, spread: 130 });
-            if (window.GAMIFICATION) window.GAMIFICATION.addXP(150, 'Arquitectura React Router dominada');
-        }
-    },
-
-    // ── Request Lifecycle ──
-    renderRequestLifecycle() {
-        const containers = document.querySelectorAll('.sim-lifecycle-container');
-        containers.forEach(container => {
-            container.innerHTML = `
-                <div class="simulator-card glass-panel">
-                    <div class="sim-header"><span class="sim-icon">&#128260;</span><h3>Request Lifecycle: React Flow</h3></div>
-                    <div class="sim-body">
-                        <div class="lifecycle-steps" style="display: flex; flex-direction: column; gap: 10px;">
-                            <div class="lifecycle-step" data-step="1">
-                                <div class="step-number">1</div>
-                                <div class="step-content">
-                                    <strong>Cliente HTTP</strong>
-                                    <p>GET /productos</p>
-                                </div>
-                            </div>
-                            <div class="lifecycle-step" data-step="2">
-                                <div class="step-number">2</div>
-                                <div class="step-content">
-                                    <strong>React Router</strong>
-                                    <p>Matchea ruta con &lt;Route path="/productos" /&gt;</p>
-                                </div>
-                            </div>
-                            <div class="lifecycle-step" data-step="3">
-                                <div class="step-number">3</div>
-                                <div class="step-content">
-                                    <strong>Componente Productos</strong>
-                                    <p>Render inicial con useState(null)</p>
-                                </div>
-                            </div>
-                            <div class="lifecycle-step" data-step="4">
-                                <div class="step-number">4</div>
-                                <div class="step-content">
-                                    <strong>useEffect</strong>
-                                    <p>Ejecuta fetch('/api/productos')</p>
-                                </div>
-                            </div>
-                            <div class="lifecycle-step" data-step="5">
-                                <div class="step-number">5</div>
-                                <div class="step-content">
-                                    <strong>API Backend</strong>
-                                    <p>Retorna JSON con productos</p>
-                                </div>
-                            </div>
-                            <div class="lifecycle-step" data-step="6">
-                                <div class="step-number">6</div>
-                                <div class="step-content">
-                                    <strong>setState</strong>
-                                    <p>Actualiza estado con datos recibidos</p>
-                                </div>
-                            </div>
-                            <div class="lifecycle-step" data-step="7">
-                                <div class="step-number">7</div>
-                                <div class="step-content">
-                                    <strong>Re-render</strong>
-                                    <p>React actualiza solo componentes afectados</p>
-                                </div>
-                            </div>
-                            <div class="lifecycle-step" data-step="8">
-                                <div class="step-number">8</div>
-                                <div class="step-content">
-                                    <strong>DOM Actualizado</strong>
-                                    <p>Virtual DOM → Real DOM (diferencias minimas)</p>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary" style="margin-top: 20px;" onclick="SIMULATORS.animateLifecycle()">Animar Flujo +75 XP</button>
-                    </div>
-                </div>
-            `;
-        });
-    },
-
-    animateLifecycle() {
-        const steps = document.querySelectorAll('.lifecycle-step');
-        steps.forEach((step, index) => {
-            setTimeout(() => {
-                step.classList.add('active');
-                if (index === steps.length - 1) {
-                    if (window.confetti) confetti({ particleCount: 100, spread: 70 });
-                    if (window.GAMIFICATION) window.GAMIFICATION.addXP(75, 'Request Lifecycle completado');
-                }
-            }, index * 500);
-        });
-        setTimeout(() => {
-            steps.forEach(step => step.classList.remove('active'));
-        }, steps.length * 500 + 2000);
-    },
-
-    // ── Interactive CRUD ──
-    renderInteractiveCRUD() {
-        const containers = document.querySelectorAll('.sim-crud-container');
-        containers.forEach(container => {
-            this.crudData = [
-                { id: 1, nombre: 'Laptop Gamer', precio: 4500000, stock: 8 },
-                { id: 2, nombre: 'Teclado Mecanico', precio: 350000, stock: 25 }
-            ];
-            this.crudNextId = 3;
-            
-            container.innerHTML = `
-                <div class="simulator-card glass-panel">
-                    <div class="sim-header"><span class="sim-icon">&#128260;</span><h3>CRUD Interactivo: Productos</h3></div>
-                    <div class="sim-body">
-                        <div class="crud-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;">
-                            <input type="text" id="crud-nombre" placeholder="Nombre" class="sim-input">
-                            <input type="number" id="crud-precio" placeholder="Precio" class="sim-input" step="0.01">
-                            <input type="number" id="crud-stock" placeholder="Stock" class="sim-input">
-                            <button class="btn btn-primary" onclick="SIMULATORS.crudCreate()">Crear</button>
-                        </div>
-                        <div class="crud-table">
-                            <table class="comparison-table">
-                                <thead>
-                                    <tr><th>ID</th><th>Nombre</th><th>Precio</th><th>Stock</th><th>Acciones</th></tr>
-                                </thead>
-                                <tbody id="crud-tbody"></tbody>
-                            </table>
-                        </div>
-                        <div class="crud-console" style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 6px; font-family: monospace; font-size: 0.85rem; max-height: 150px; overflow-y: auto;" id="crud-console"></div>
-                    </div>
-                </div>
-            `;
-            this.crudRender();
-        });
-    },
-
-    crudRender() {
-        const tbody = document.getElementById('crud-tbody');
-        if (!tbody) return;
-        tbody.innerHTML = this.crudData.map(item => `
-            <tr>
-                <td>${item.id}</td>
-                <td>${item.nombre}</td>
-                <td>$${item.precio.toLocaleString('es-CO')}</td>
-                <td>${item.stock}</td>
-                <td><button class="btn btn-sm" onclick="SIMULATORS.crudDelete(${item.id})">Eliminar</button></td>
-            </tr>
-        `).join('');
-    },
-
-    crudLog(msg) {
-        const console = document.getElementById('crud-console');
-        if (console) {
-            const time = new Date().toLocaleTimeString('es-CO');
-            console.innerHTML += `<div>[${time}] ${msg}</div>`;
-            console.scrollTop = console.scrollHeight;
-        }
-    },
-
-    crudCreate() {
-        const nombre = document.getElementById('crud-nombre').value;
-        const precio = parseFloat(document.getElementById('crud-precio').value);
-        const stock = parseInt(document.getElementById('crud-stock').value);
-        
-        if (!nombre || isNaN(precio) || isNaN(stock)) {
-            this.crudLog('ERROR: Datos invalidos');
-            return;
-        }
-        
-        const newItem = { id: this.crudNextId++, nombre, precio, stock };
-        this.crudData.push(newItem);
-        this.crudRender();
-        this.crudLog(`POST /productos → 201 Created (id: ${newItem.id})`);
-        
-        document.getElementById('crud-nombre').value = '';
-        document.getElementById('crud-precio').value = '';
-        document.getElementById('crud-stock').value = '';
-        
-        if (window.GAMIFICATION) window.GAMIFICATION.addXP(25, 'Producto creado');
-    },
-
-    crudDelete(id) {
-        this.crudData = this.crudData.filter(item => item.id !== id);
-        this.crudRender();
-        this.crudLog(`DELETE /productos/${id} → 204 No Content`);
-        if (window.GAMIFICATION) window.GAMIFICATION.addXP(25, 'Producto eliminado');
     }
 };
 
 window.SIMULATORS = SIMULATORS;
-document.addEventListener('DOMContentLoaded', () => SIMULATORS.init());

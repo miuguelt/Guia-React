@@ -1,8 +1,8 @@
 # CORTEX MAP - Guia React
 
 **Proyecto:** Guia React | SENA ADSO  
-**Version:** 1.0  
-**Ultima actualizacion:** Junio 2026
+**Version:** 2.0  
+**Ultima actualizacion:** Agosto 2026
 
 ---
 
@@ -11,14 +11,26 @@
 ```
 Guia React/
 ├── web/                          # Guia web interactiva (puerto 8030)
+│   ├── css/styles.css            # Estilos Mobile-First (320px a 2560px), Modales, Toasts
+│   ├── js/
+│   │   ├── main.js               # Enrutamiento SPA, Toasts, Modales y Drawer
+│   │   ├── modules-content.js    # 12 modulos con conexion Spring Boot y AI Prompts
+│   │   ├── simulators.js         # API Tester, CRUD Studio, Mobile Drawer, Hooks
+│   │   ├── code-renderer.js      # Resaltador Prism con JSX/TSX/Java/Bash
+│   │   └── gamification.js       # Gamificacion con XP y badges
+│   └── index.html
 ├── recursos/
-│   ├── codigo-ejemplo/           # SSOT - Codigo fuente REAL
+│   ├── codigo-ejemplo/           # SSOT - Codigo fuente REAL en React 19/18 + Vite
+│   │   └── src/
+│   │       ├── components/       # Navbar, Modal, Toast, TablaFincas, FincaCard
+│   │       ├── services/         # api.js conectado a Spring Boot (31026)
+│   │       └── pages/            # Home, FincasCrudPage
 │   ├── sql/                      # Scripts de BD
 │   └── docker/                   # Dockerfile, compose
-├── tests/                        # Tests pytest
+├── tests/                        # Tests pytest / vitest
 ├── .devbrain/                    # Automatizacion
 ├── generar_guia.py               # Generador DOCX
-└── start-windows.ps1             # Servidor web
+└── start-windows.ps1             # Servidor web en puerto 8030
 ```
 
 ---
@@ -27,8 +39,8 @@ Guia React/
 
 | Archivo | Proposito | Comando |
 |---------|-----------|---------|
-| start-windows.ps1 | Servir guia web | .\start-windows.ps1 |
-| generar_guia.py | Generar DOCX | python generar_guia.py |
+| start-windows.ps1 | Servir guia web interactiva (puerto 8030) | `.\start-windows.ps1` |
+| generar_guia.py | Generar documento DOCX oficial | `python generar_guia.py` |
 
 ---
 
@@ -37,20 +49,19 @@ Guia React/
 | Servicio | Puerto | Descripcion |
 |----------|--------|-------------|
 | Guia Web | 8030 | Guia interactiva HTML/CSS/JS |
+| Spring Boot API | 31026 | Backend antecesor (guia-spring) con endpoints Fincas/Cultivos |
+| PostgreSQL | 5434 | Base de datos persistente (servicio postgresql-x64-18) |
 
 ---
 
----
-
-## Ruta ADSO
-- **Fase**: 3 de 5
-- **Antecesora**: guia-spring (Fase 2) — Puerto 8026
-- **Sucesora**: Guia FastApi (Fase 4) — Puerto 8025
-- **Dominio compartido**: Fincas y Cultivos (Vélez, Santander)
+## 4. Ruta Curricular ADSO
+- **Fase**: 3 de 5 (Frontend React)
+- **Antecesora**: guia-spring (Fase 2) — Puerto 31026
+- **Sucesora**: Guia FastAPI (Fase 4) — Puerto 8025
+- **Dominio compartido**: Fincas y Cultivos (Santander, Colombia)
 - **Puerto guia web**: 8030
-- **Puerto API**: N/A (frontend puro)
-- **Stack**: React 18+, Vite, React Router, CSS Modules, Vitest
+- **Stack**: React 19/18, Vite, CSS Modules, Mobile-First, Fetch API / Axios
 
 ---
 
-*Documento vivo: Actualizar conforme evoluciona el proyecto.*
+*Documento vivo: Actualizado conforme evoluciona el proyecto.*
