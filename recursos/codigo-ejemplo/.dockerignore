@@ -1,0 +1,25 @@
+# Git
+.git
+.gitignore
+
+# DevBrain
+.devbrain/
+
+# IDE
+.vscode/
+.idea/
+
+# Docs
+*.md
+!README.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.env

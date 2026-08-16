@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" fill="none">
+  <rect width="800" height="500" rx="12" fill="#0f172a"/>
+  <text x="400" y="35" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="18" font-weight="700" fill="#38bdf8">Arquitectura de Componentes React</text>
+  
+  <!-- App Root -->
+  <rect x="310" y="55" width="180" height="45" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="2"/>
+  <text x="400" y="82" text-anchor="middle" font-family="Inter, sans-serif" font-size="13" font-weight="700" fill="#38bdf8">App (Root Component)</text>
+  
+  <!-- Arrow down -->
+  <line x1="400" y1="100" x2="400" y2="120" stroke="#475569" stroke-width="2"/>
+  <polygon points="395,118 400,128 405,118" fill="#475569"/>
+  
+  <!-- BrowserRouter -->
+  <rect x="290" y="130" width="220" height="40" rx="8" fill="#1e293b" stroke="#818cf8" stroke-width="1.5"/>
+  <text x="400" y="155" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#818cf8">BrowserRouter + Routes</text>
+  
+  <!-- Three route boxes -->
+  <rect x="50" y="190" width="200" height="90" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+  <rect x="50" y="190" width="200" height="28" rx="8" fill="rgba(56,189,248,0.15)"/>
+  <text x="150" y="209" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700" fill="#38bdf8">Pagina Inicio</text>
+  <text x="60" y="232" font-family="JetBrains Mono, monospace" font-size="9" fill="#94a3b8">function Inicio()</text>
+  <text x="60" y="247" font-family="JetBrains Mono, monospace" font-size="9" fill="#94a3b8">  useState()</text>
+  <text x="60" y="262" font-family="JetBrains Mono, monospace" font-size="9" fill="#94a3b8">  return JSX</text>
+  
+  <rect x="300" y="190" width="200" height="90" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="1.5"/>
+  <rect x="300" y="190" width="200" height="28" rx="8" fill="rgba(16,185,129,0.15)"/>
+  <text x="400" y="209" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700" fill="#10b981">Pagina Productos</text>
+  <text x="310" y="232" font-family="JetBrains Mono, monospace" font-size="9" fill="#94a3b8">useFetch('/api/productos')</text>
+  <text x="310" y="247" font-family="JetBrains Mono, monospace" font-size="9" fill="#94a3b8">useState({ productos })</text>
+  <text x="310" y="262" font-family="JetBrains Mono, monospace" font-size="9" fill="#94a3b8">map(productos => Item)</text>
+  
+  <rect x="550" y="190" width="200" height="90" rx="8" fill="#1e293b" stroke="#818cf8" stroke-width="1.5"/>
+  <rect x="550" y="190" width="200" height="28" rx="8" fill="rgba(129,140,248,0.15)"/>
+  <text x="650" y="209" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="11" font-weight="700" fill="#818cf8">Pagina Perfil</text>
+  <text x="560" y="232" font-family="JetBrains Mono, monospace" font-size="9" fill="#94a3b8">useContext(AuthContext)</text>
+  <text x="560" y="247" font-family="JetBrains Mono, monospace" font-size="9" fill="#94a3b8">useParams()</text>
+  <text x="560" y="262" font-family="JetBrains Mono, monospace" font-size="9" fill="#94a3b8">useEffect() fetch user</text>
+  
+  <!-- Componentes reutilizables -->
+  <text x="400" y="310" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Componentes Reutilizables</text>
+  
+  <rect x="100" y="320" width="130" height="50" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>
+  <text x="165" y="350" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#f59e0b">Button</text>
+  
+  <rect x="260" y="320" width="130" height="50" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>
+  <text x="325" y="350" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#f59e0b">Card</text>
+  
+  <rect x="420" y="320" width="130" height="50" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>
+  <text x="485" y="350" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#f59e0b">Input</text>
+  
+  <rect x="580" y="320" width="130" height="50" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>
+  <text x="645" y="350" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#f59e0b">Modal</text>
+  
+  <!-- Custom Hooks -->
+  <text x="400" y="400" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" fill="#94a3b8">Custom Hooks</text>
+  
+  <rect x="150" y="410" width="150" height="40" rx="8" fill="#1e293b" stroke="#22c55e" stroke-width="1"/>
+  <text x="225" y="435" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#22c55e">useFetch()</text>
+  
+  <rect x="330" y="410" width="150" height="40" rx="8" fill="#1e293b" stroke="#22c55e" stroke-width="1"/>
+  <text x="405" y="435" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#22c55e">useAuth()</text>
+  
+  <rect x="510" y="410" width="150" height="40" rx="8" fill="#1e293b" stroke="#22c55e" stroke-width="1"/>
+  <text x="585" y="435" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10" fill="#22c55e">useLocalStorage()</text>
+  
+  <!-- Legend -->
+  <rect x="20" y="465" width="12" height="12" rx="2" fill="rgba(56,189,248,0.3)" stroke="#38bdf8" stroke-width="1"/>
+  <text x="36" y="476" font-family="Inter, sans-serif" font-size="9" fill="#94a3b8">Paginas</text>
+  <rect x="110" y="465" width="12" height="12" rx="2" fill="rgba(245,158,11,0.3)" stroke="#f59e0b" stroke-width="1"/>
+  <text x="126" y="476" font-family="Inter, sans-serif" font-size="9" fill="#94a3b8">Componentes</text>
+  <rect x="230" y="465" width="12" height="12" rx="2" fill="rgba(34,197,94,0.3)" stroke="#22c55e" stroke-width="1"/>
+  <text x="246" y="476" font-family="Inter, sans-serif" font-size="9" fill="#94a3b8">Hooks</text>
+  <rect x="320" y="465" width="12" height="12" rx="2" fill="rgba(129,140,248,0.3)" stroke="#818cf8" stroke-width="1"/>
+  <text x="336" y="476" font-family="Inter, sans-serif" font-size="9" fill="#94a3b8">Router</text>
+</svg>

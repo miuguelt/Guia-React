@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENA ADSO - Guia React</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="background-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+    <div id="particles" class="particles-container"></div>
+
+    <button id="sidebar-toggle" class="sidebar-toggle" aria-label="Toggle sidebar">&#9776;</button>
+
+    <aside id="sidebar" class="sidebar glass-panel">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">&#9889;</span>
+                <span class="logo-text">Guia <span class="highlight">React</span></span>
+            </div>
+            <span class="sidebar-version">v1.0</span>
+        </div>
+        <div class="sidebar-user">
+            <div class="user-level">
+                <span id="user-level-name">Novato</span>
+                <span id="user-level" class="user-level-badge">Nivel 1</span>
+            </div>
+            <div class="user-xp"><span id="user-xp">0 XP</span></div>
+            <div class="progress-bar xp-bar"><div id="xp-progress-fill" class="progress-fill"></div></div>
+        </div>
+        <div class="sidebar-progress">
+            <div class="progress-label"><span>Progreso del curso</span><span id="progress-pct">0%</span></div>
+            <div class="progress-bar course-bar"><div id="course-progress" class="progress-fill"></div></div>
+        </div>
+        <div class="sidebar-search">
+            <input type="text" id="sidebar-search" placeholder="Buscar modulo... (Ctrl+K)">
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <span class="nav-section-title">Fundamentos</span>
+                <a href="#welcome" class="nav-item active" data-module="welcome"><span class="nav-icon">&#127968;</span><span class="nav-text">Inicio</span></a>
+                <a href="#m-reflexion" class="nav-item" data-module="m-reflexion"><span class="nav-icon">&#129504;</span><span class="nav-text">Reflexion</span><span class="nav-badge">1</span></a>
+                <a href="#m-entorno" class="nav-item" data-module="m-entorno"><span class="nav-icon">&#128736;</span><span class="nav-text">Entorno</span><span class="nav-badge">2</span></a>
+                <a href="#m-componentes" class="nav-item" data-module="m-componentes"><span class="nav-icon">&#128230;</span><span class="nav-text">Componentes</span><span class="nav-badge">3</span></a>
+            </div>
+            <div class="nav-section">
+                <span class="nav-section-title">Interactividad</span>
+                <a href="#m-estado" class="nav-item" data-module="m-estado"><span class="nav-icon">&#128204;</span><span class="nav-text">Estado</span><span class="nav-badge">4</span></a>
+                <a href="#m-efectos" class="nav-item" data-module="m-efectos"><span class="nav-icon">&#128640;</span><span class="nav-text">Efectos</span><span class="nav-badge">5</span></a>
+            </div>
+            <div class="nav-section">
+                <span class="nav-section-title">Profesional</span>
+                <a href="#m-routing" class="nav-item" data-module="m-routing"><span class="nav-icon">&#128279;</span><span class="nav-text">Routing</span><span class="nav-badge">6</span></a>
+                <a href="#m-api" class="nav-item" data-module="m-api"><span class="nav-icon">&#128260;</span><span class="nav-text">API Calls</span><span class="nav-badge">7</span></a>
+                <a href="#m-simuladores" class="nav-item" data-module="m-simuladores"><span class="nav-icon">&#127918;</span><span class="nav-text">Simuladores</span><span class="nav-badge">8</span></a>
+                <a href="#m-retos" class="nav-item" data-module="m-retos"><span class="nav-icon">&#127919;</span><span class="nav-text">Retos</span><span class="nav-badge">9</span></a>
+            </div>
+        </nav>
+    </aside>
+
+    <div class="main-wrapper">
+        <header class="top-header glass-panel">
+            <div class="breadcrumb">Guia React > <span id="breadcrumb-current">Inicio</span></div>
+            <div class="header-actions">
+                <button class="btn btn-sm btn-primary" onclick="APP.navigateTo('m-simuladores')">Simuladores</button>
+            </div>
+        </header>
+
+        <main class="content">
+            <section id="welcome" class="page-section active">
+                <div class="hero-section section-card glass-panel">
+                    <div class="badge">Guia de Aprendizaje Oficial - SENA ADSO</div>
+                    <h1 class="title">Desarrollo con <span class="gradient-text">React</span></h1>
+                    <p class="subtitle">Aprende a construir interfaces de usuario modernas, rapidas y reactivas con React 18, Vite y JavaScript.</p>
+                    <div class="hero-stats">
+                        <div class="stat"><span class="stat-number">8</span><span class="stat-label">Modulos</span></div>
+                        <div class="stat"><span class="stat-number">6</span><span class="stat-label">Simuladores</span></div>
+                        <div class="stat"><span class="stat-number">40h</span><span class="stat-label">Duracion</span></div>
+                    </div>
+                </div>
+                <div class="section-card glass-panel">
+                    <h2>Tecnologias del Stack</h2>
+                    <div class="tech-grid">
+                        <div class="tech-card glass-panel-inner"><span class="tech-icon">&#9889;</span><h4>React 18</h4><p>Libreria UI</p></div>
+                        <div class="tech-card glass-panel-inner"><span class="tech-icon">&#127912;</span><h4>Vite</h4><p>Build tool</p></div>
+                        <div class="tech-card glass-panel-inner"><span class="tech-icon">&#128013;</span><h4>JavaScript ES6+</h4><p>Lenguaje</p></div>
+                        <div class="tech-card glass-panel-inner"><span class="tech-icon">&#128640;</span><h4>Hooks</h4><p>Estado y efectos</p></div>
+                        <div class="tech-card glass-panel-inner"><span class="tech-icon">&#128279;</span><h4>React Router</h4><p>Navegacion</p></div>
+                        <div class="tech-card glass-panel-inner"><span class="tech-icon">&#128260;</span><h4>Fetch API</h4><p>HTTP client</p></div>
+                    </div>
+                </div>
+                <div class="section-card glass-panel">
+                    <h2>Guias por Fases</h2>
+                    <div class="tech-grid">
+                        <a href="fase3.html" class="tech-card glass-panel-inner" style="text-decoration:none;color:inherit;">
+                            <span class="tech-icon">&#128260;</span>
+                            <h4>Fase 3: APIs con React</h4>
+                            <p>Consumo de APIs, CRUD N:M Finca-Cultivo</p>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section id="m-reflexion" class="page-section module-page">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Modulo 1</span>
+                        <h1>Reflexion Inicial: Por que React?</h1>
+                        <p>Entendamos el problema que React resuelve: manipulación ineficiente del DOM.</p>
+                    </div>
+                    <div class="alert-box note">
+                        <h3>El problema del DOM manual</h3>
+                        <p>Antes de React, actualizar la interfaz requería manipular el DOM manualmente con JavaScript puro o jQuery. Esto causaba codigo propenso a errores, dificil de mantener y con rendimiento inconsistente.</p>
+                    </div>
+                    <div class="grid-2-cols mt-4">
+                        <div class="card glass-panel-inner border-error">
+                            <h3 class="text-error">jQuery/DOM Manual</h3>
+                            <div id="code-m-reflexion-jquery"></div>
+                        </div>
+                        <div class="card glass-panel-inner border-success">
+                            <h3 class="text-success">React</h3>
+                            <div id="code-m-reflexion-react"></div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary mark-complete-btn" data-module="m-reflexion">Marcar +250 XP</button>
+                </div>
+            </section>
+
+            <section id="m-entorno" class="page-section module-page">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Modulo 2</span>
+                        <h1>Configuracion del Entorno</h1>
+                        <p>Node.js, npm y Vite para crear tu primer proyecto React.</p>
+                    </div>
+                    <div id="code-m-entorno" class="code-container"></div>
+                    <button class="btn btn-primary mark-complete-btn" data-module="m-entorno">Marcar +250 XP</button>
+                </div>
+            </section>
+
+            <section id="m-componentes" class="page-section module-page">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Modulo 3</span>
+                        <h1>Componentes y Props</h1>
+                        <p>La unidad basica de React: componentes funcionales reutilizables.</p>
+                    </div>
+                    <div id="code-m-componentes" class="code-container"></div>
+                    <button class="btn btn-primary mark-complete-btn" data-module="m-componentes">Marcar +250 XP</button>
+                </div>
+            </section>
+
+            <section id="m-estado" class="page-section module-page">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Modulo 4</span>
+                        <h1>Estado con useState</h1>
+                        <p>Datos que cambian en el tiempo y React los refleja automaticamente.</p>
+                    </div>
+                    <div id="code-m-estado" class="code-container"></div>
+                    <button class="btn btn-primary mark-complete-btn" data-module="m-estado">Marcar +250 XP</button>
+                </div>
+            </section>
+
+            <section id="m-efectos" class="page-section module-page">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Modulo 5</span>
+                        <h1>Efectos con useEffect</h1>
+                        <p>Sincroniza tu componente con sistemas externos: APIs, timers, DOM.</p>
+                    </div>
+                    <div id="code-m-efectos" class="code-container"></div>
+                    <button class="btn btn-primary mark-complete-btn" data-module="m-efectos">Marcar +250 XP</button>
+                </div>
+            </section>
+
+            <section id="m-routing" class="page-section module-page">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Modulo 6</span>
+                        <h1>React Router</h1>
+                        <p>Navegacion entre paginas sin recargar el navegador.</p>
+                    </div>
+                    <div id="code-m-routing" class="code-container"></div>
+                    <button class="btn btn-primary mark-complete-btn" data-module="m-routing">Marcar +250 XP</button>
+                </div>
+            </section>
+
+            <section id="m-api" class="page-section module-page">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Modulo 7</span>
+                        <h1>Llamadas a API y Custom Hooks</h1>
+                        <p>Fetch, estados de carga/error, y creacion de hooks reutilizables.</p>
+                    </div>
+                    <div id="code-m-api" class="code-container"></div>
+                    <button class="btn btn-primary mark-complete-btn" data-module="m-api">Marcar +250 XP</button>
+                </div>
+            </section>
+
+            <section id="m-simuladores" class="page-section module-page">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Modulo 8</span>
+                        <h1>Simuladores Interactivos</h1>
+                        <p>Practica JSX, Props, Estado, Hooks y mas.</p>
+                    </div>
+                    <h3>JSX Live Editor</h3>
+                    <div class="sim-routes-container"></div>
+                    <h3 class="mt-4">Props Simulator</h3>
+                    <div class="sim-jinja-container"></div>
+                    <h3 class="mt-4">useState Simulator</h3>
+                    <div class="sim-orm-container"></div>
+                    <h3 class="mt-4">Hooks Playground</h3>
+                    <div class="sim-db-container"></div>
+                    <h3 class="mt-4">Quiz React</h3>
+                    <div class="sim-quiz-container"></div>
+                    <h3 class="mt-4">Modo Debugging</h3>
+                    <div class="sim-debug-container"></div>
+                    <h3 class="mt-4">Router Architect (Drag & Drop)</h3>
+                    <div class="sim-arch-container"></div>
+                    <h3 class="mt-4">Request Lifecycle (Flujo Animado)</h3>
+                    <div class="sim-lifecycle-container"></div>
+                    <h3 class="mt-4">CRUD Interactivo</h3>
+                    <div class="sim-crud-container"></div>
+                </div>
+            </section>
+
+            <section id="m-retos" class="page-section module-page">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Retos</span>
+                        <h1>Transferencia del Conocimiento</h1>
+                        <p>Demuestra lo aprendido con proyectos reales.</p>
+                    </div>
+                    <div class="exercise-block glass-panel-inner mt-4">
+                        <span class="exercise-badge challenge">Reto 1</span>
+                        <h3>App de Tareas (Todo List)</h3>
+                        <ul>
+                            <li>Crear, completar y eliminar tareas</li>
+                            <li>Persistencia con localStorage</li>
+                            <li>Filtro por estado (todas/activas/completadas)</li>
+                        </ul>
+                    </div>
+                    <div class="exercise-block glass-panel-inner mt-4">
+                        <span class="exercise-badge project">Reto 2</span>
+                        <h3>Frontend Fincas y Cultivos</h3>
+                        <ul>
+                            <li>Consumir API REST de Spring Boot</li>
+                            <li>Manejo de estados asincronos y CORS</li>
+                            <li>Detalle de finca con ruta dinamica</li>
+                        </ul>
+                    </div>
+                    <div class="exercise-block glass-panel-inner mt-4">
+                        <span class="exercise-badge challenge">Reto 3</span>
+                        <h3>Dashboard con Custom Hooks</h3>
+                        <ul>
+                            <li>useFetch personalizado</li>
+                            <li>Graficos con Chart.js o Recharts</li>
+                            <li>Dark/Light mode con Context</li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-primary mark-complete-btn" data-module="m-retos">Marcar +250 XP</button>
+                </div>
+            </section>
+            <section id="descargar" class="page-section module-page">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">&#128229; Descargar Proyecto</span>
+                        <h1>Descarga y ejecuta la app React</h1>
+                        <p>El codigo completo del proyecto esta en <code>recursos/codigo-ejemplo/</code>. Sigue estos pasos para ponerlo en marcha.</p>
+                    </div>
+
+                    <h3>&#128221; Requisitos</h3>
+                    <ul>
+                        <li>Node.js 18+ instalado</li>
+                        <li>npm (viene con Node.js)</li>
+                        <li>La API FastAPI corriendo en <code>http://localhost:8009</code> (para Fase 3)</li>
+                    </ul>
+
+                    <h3 class="mt-4">&#128736; Instrucciones paso a paso</h3>
+                    <div class="code-block-wrapper">
+                        <div class="code-file-header"><span class="file-icon">&#128194;</span><span class="file-path">Terminal</span></div>
+                        <pre class="code-block"><code># 1. Ve a la carpeta del proyecto
+cd recursos/codigo-ejemplo
+
+# 2. Instala dependencias
+npm install
+
+# 3. Inicia el servidor de desarrollo
+npm run dev</code></pre>
+                    </div>
+
+                    <div class="alert-box note mt-4">
+                        <h4>&#128279; Proxy a la API</h4>
+                        <p>El proyecto Vite esta configurado con proxy en <code>vite.config.js</code>. Las llamadas a <code>/api/*</code> se redirigen automaticamente a <code>http://localhost:8009</code>. No necesitas configurar CORS manualmente.</p>
+                    </div>
+
+                    <h3 class="mt-4">&#128269; Probar con pruebas unitarias</h3>
+                    <div class="code-block-wrapper">
+                        <div class="code-file-header"><span class="file-icon">&#128200;</span><span class="file-path">Terminal</span></div>
+                        <pre class="code-block"><code># Ejecutar todas las pruebas
+npm test
+
+# Modo watch (se re-ejecutan al guardar)
+npm test -- --watch</code></pre>
+                    </div>
+
+                    <div class="alert-box success mt-4">
+                        <h4>&#127912; Hot Reload incluido</h4>
+                        <p>Vite recarga automaticamente el navegador cuando guardas un archivo. Los cambios se ven al instante sin recargar manual.</p>
+                    </div>
+
+                    <div class="alert-box note mt-4">
+                        <h4>&#128196; Mas alla de la guia</h4>
+                        <p>Para la <strong>Fase 3</strong> con CRUD N:M y consumo de APIs, visita la <a href="fase3.html" style="color:var(--accent);">guia especializada Fase 3</a>.</p>
+                    </div>
+                </div>
+            </section>
+
+            <footer>
+                <p>SENA ADSO - Guia de React v1.0</p>
+            </footer>
+        </main>
+    </div>
+
+    <div id="victory-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <span class="modal-icon">&#127942;</span>
+                <h2>&#161;Certificacion React Superada!</h2>
+            </div>
+            <div class="modal-body">
+                <p class="modal-stats">Has completado todos los modulos de la guia.</p>
+                <div class="modal-stats-grid">
+                    <div class="modal-stat">
+                        <span class="modal-stat-number" id="modal-modules">0</span>
+                        <span class="modal-stat-label">Modulos</span>
+                    </div>
+                    <div class="modal-stat">
+                        <span class="modal-stat-number" id="modal-xp">0</span>
+                        <span class="modal-stat-label">XP Totales</span>
+                    </div>
+                    <div class="modal-stat">
+                        <span class="modal-stat-number" id="modal-level">0</span>
+                        <span class="modal-stat-label">Nivel</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="APP.closeVictoryModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-powershell.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.min.js"></script>
+    <script src="js/gamification.js"></script>
+    <script src="js/simulators.js"></script>
+    <script src="js/modules-content.js"></script>
+    <script src="js/code-renderer.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

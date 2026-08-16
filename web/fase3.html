@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fase 3 - Consumo de APIs con React | SENA ADSO 2026</title>
+    <meta name="description" content="Guia interactiva Fase 3: Consumo de APIs con React, Vite y el dominio Finca-Cultivo N:M. SENA ADSO cohorte 2026.">
+    <link rel="stylesheet" href="css/fase3-styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="bg-pattern"></div>
+
+    <button id="nav-toggle" class="nav-toggle" aria-label="Abrir menu de navegacion">&#9776;</button>
+
+    <nav id="sidebar" class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">&#9889;</div>
+            <div class="brand-text">
+                <span class="brand-title">Fase <strong>3</strong></span>
+                <span class="brand-sub">SENA ADSO 2026</span>
+            </div>
+        </div>
+        <div class="sidebar-progress">
+            <div class="progress-info">
+                <span id="progress-label">0 de 8 completados</span>
+                <span id="progress-pct">0%</span>
+            </div>
+            <div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div>
+        </div>
+        <ul class="nav-list">
+            <li><a href="#inicio" class="nav-link active" data-section="inicio"><span class="nav-num">0</span><span class="nav-label">Inicio</span></a></li>
+            <li><a href="#entorno" class="nav-link" data-section="entorno"><span class="nav-num">1</span><span class="nav-label">Entorno</span></a></li>
+            <li><a href="#holamundo" class="nav-link" data-section="holamundo"><span class="nav-num">2</span><span class="nav-label">Hola Mundo</span></a></li>
+            <li><a href="#jsx" class="nav-link" data-section="jsx"><span class="nav-num">3</span><span class="nav-label">JSX y Componentes</span></a></li>
+            <li><a href="#estado" class="nav-link" data-section="estado"><span class="nav-num">4</span><span class="nav-label">Estado y Efectos</span></a></li>
+            <li><a href="#apis" class="nav-link" data-section="apis"><span class="nav-num">5</span><span class="nav-label">Consumo de APIs</span></a></li>
+            <li><a href="#crud" class="nav-link" data-section="crud"><span class="nav-num">6</span><span class="nav-label">CRUD N:M</span></a></li>
+            <li><a href="#ux" class="nav-link" data-section="ux"><span class="nav-num">7</span><span class="nav-label">UX para N:M</span></a></li>
+            <li><a href="#reto" class="nav-link" data-section="reto"><span class="nav-num">8</span><span class="nav-label">Reto Final</span></a></li>
+        </ul>
+        <div class="sidebar-footer">
+            <a href="index.html" class="btn-back">&#8592; Volver a la Guia</a>
+        </div>
+    </nav>
+
+    <div class="main-area">
+        <header class="topbar">
+            <div class="topbar-left">
+                <span class="topbar-crumb">Fase 3 &rsaquo; <span id="crumb-current">Inicio</span></span>
+            </div>
+            <div class="topbar-right">
+                <span class="topbar-tag">Dominio: Finca &harr; Cultivo (N:M)</span>
+            </div>
+        </header>
+
+        <main class="content-area">
+
+            <section id="inicio" class="section active">
+                <div class="hero-card">
+                    <span class="hero-badge">Fase 3 &mdash; Frontend con React</span>
+                    <h1 class="hero-title">Consumo de <span class="text-gradient">APIs</span> con React + Vite</h1>
+                    <p class="hero-desc">Conectamos el frontend React con la API FastAPI que construiste en las Fases 1 y 2. Aprenderas a consumir datos, manejar estados de carga/error/vacio y visualizar la relacion <strong>muchos a muchos</strong> entre Fincas y Cultivos en la interfaz.</p>
+                    <div class="hero-objectives">
+                        <h3>Objetivos de aprendizaje</h3>
+                        <ul>
+                            <li>Consumir desde React la API construida en fases anteriores</li>
+                            <li>Representar visualmente una relacion N:M sin confundir al usuario final</li>
+                            <li>Manejar estados de carga, error y vacio correctamente</li>
+                            <li>Construir un CRUD frontend que respete la integridad del dominio</li>
+                        </ul>
+                    </div>
+                    <div class="hero-domain">
+                        <h3>Dominio de datos (continuidad Fases 1-2)</h3>
+                        <div class="domain-diagram">
+                            <div class="domain-entity">
+                                <div class="entity-header entity-finca">Finca</div>
+                                <div class="entity-fields">
+                                    <span>id (PK)</span><span>nombre</span><span>propietario</span>
+                                    <span>vereda</span><span>municipio</span><span>hectareas</span>
+                                </div>
+                            </div>
+                            <div class="domain-relation">
+                                <div class="relation-label">N:M</div>
+                                <div class="relation-entity">
+                                    <div class="entity-header entity-assoc">FincaCultivo</div>
+                                    <div class="entity-fields">
+                                        <span>finca_id (FK)</span><span>cultivo_id (FK)</span>
+                                        <span>area_sembrada_ha</span><span>fecha_siembra</span>
+                                        <span>temporada</span><span>estado</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="domain-entity">
+                                <div class="entity-header entity-cultivo">Cultivo</div>
+                                <div class="entity-fields">
+                                    <span>id (PK)</span><span>nombre</span><span>tipo</span><span>ciclo_dias</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="domain-why">
+                            <strong>&iquest;Por que una tabla intermedia?</strong> Una llave foranea simple solo puede expresar "uno a muchos". Para decir "una finca tiene muchos cultivos Y un cultivo esta en muchas fincas", necesitamos <code>FincaCultivo</code>. Ademas, la relacion tiene atributos propios (area, fecha, temporada) que no pertenecen ni a Finca ni a Cultivo solos.
+                        </div>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat-item"><span class="stat-num">8</span><span class="stat-lbl">Secciones</span></div>
+                        <div class="stat-item"><span class="stat-num">12</span><span class="stat-lbl">Ejemplos de codigo</span></div>
+                        <div class="stat-item"><span class="stat-num">3</span><span class="stat-lbl">Simuladores</span></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="entorno" class="section">
+                <div class="card">
+                    <div class="section-header">
+                        <span class="section-num">01</span>
+                        <div>
+                            <h2>Preparacion del Entorno</h2>
+                            <p class="section-desc">Instalacion de Node.js y creacion del proyecto con Vite.</p>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <strong>Requisito previo:</strong> Necesitas Node.js 18+ instalado. Verifica con <code>node --version</code> en tu terminal. Si no lo tienes, descargalo desde nodejs.org (version LTS).
+                    </div>
+
+                    <h3>Paso 1: Crear proyecto con Vite</h3>
+                    <div data-code-module="fase3_entorno:0"></div>
+
+                    <div class="alert alert-tip">
+                        <strong>Vite es rapido porque:</strong> usa módulos nativos del navegador (ESM) en desarrollo. No empaqueta todo como Webpack. El hot-reload es casi instantaneo incluso en equipos modestos.
+                    </div>
+
+                    <h3>Paso 2: Estructura del proyecto</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-file">Estructura de carpetas</span>
+                        </div>
+                        <pre><code class="language-text">frontend-fincas/
+├── index.html
+├── package.json
+├── vite.config.js
+├── src/
+│   ├── main.jsx          ← Punto de entrada
+│   ├── App.jsx            ← Componente raiz
+│   ├── App.css
+│   ├── components/        ← Tus componentes
+│   │   ├── FincaTable.jsx
+│   │   ├── CultivoTable.jsx
+│   │   ├── AsociarForm.jsx
+│   │   └── FincaDetalle.jsx
+│   ├── hooks/             ← Custom hooks
+│   │   └── useApi.js
+│   └── services/          ← Funciones de consumo API
+│       └── api.js</code></pre>
+                    </div>
+
+                    <h3>Paso 3: Configurar proxy para la API</h3>
+                    <div data-code-module="fase3_entorno:1"></div>
+
+                    <div class="alert alert-warning">
+                        <strong>Conexion intermitente:</strong> Si tu internet falla, no te preocupes. Una vez instaladas las dependencias (<code>npm install</code>), Vite funciona 100% offline. Solo necesitas internet la primera vez.
+                    </div>
+
+                    <button class="btn-complete" data-section="entorno">Marcar como completado</button>
+                </div>
+            </section>
+
+            <section id="holamundo" class="section">
+                <div class="card">
+                    <div class="section-header">
+                        <span class="section-num">02</span>
+                        <div>
+                            <h2>Hola Mundo en React</h2>
+                            <p class="section-desc">Tu primer componente funcional renderizado en el DOM.</p>
+                        </div>
+                    </div>
+
+                    <div data-code-module="fase3_holamundo:0"></div>
+
+                    <div class="concept-grid">
+                        <div class="concept-card">
+                            <h4>&iquest;Que es un componente?</h4>
+                            <p>Una funcion que retorna JSX (HTML-like). Es la unidad basica de React: reutilizable y composicional.</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>&iquest;Que es JSX?</h4>
+                            <p>Sintaxis que parece HTML pero vive dentro de JavaScript. Permite mezclar logica y vista en un mismo archivo.</p>
+                        </div>
+                        <div class="concept-card">
+                            <h4>&iquest;Que es export default?</h4>
+                            <p>Hace que el componente pueda ser importado en otro archivo. <code>main.jsx</code> importa <code>App</code> y lo renderiza.</p>
+                        </div>
+                    </div>
+
+                    <h3>Simulador: Componente en vivo</h3>
+                    <div class="simulator" id="sim-holamundo">
+                        <div class="sim-controls">
+                            <label>Nombre de la finca:
+                                <input type="text" id="sim-nombre" value="Finca El Porvenir" placeholder="Nombre">
+                            </label>
+                            <label>Hectareas:
+                                <input type="number" id="sim-hectareas" value="8.5" step="0.1" min="0">
+                            </label>
+                        </div>
+                        <div class="sim-output">
+                            <div class="sim-label">Resultado renderizado:</div>
+                            <div id="sim-holamundo-output" class="sim-preview"></div>
+                        </div>
+                        <div class="sim-code">
+                            <div class="sim-label">Codigo equivalente:</div>
+                            <pre><code id="sim-holamundo-code" class="language-jsx"></code></pre>
+                        </div>
+                    </div>
+
+                    <button class="btn-complete" data-section="holamundo">Marcar como completado</button>
+                </div>
+            </section>
+
+            <section id="jsx" class="section">
+                <div class="card">
+                    <div class="section-header">
+                        <span class="section-num">03</span>
+                        <div>
+                            <h2>JSX y Componentes</h2>
+                            <p class="section-desc">Sintaxis JSX, expresiones, listas y componentes con props.</p>
+                        </div>
+                    </div>
+
+                    <h3>Expresiones en JSX</h3>
+                    <p>Dentro de <code>{'{ }'}</code> puedes poner cualquier expresion JavaScript: variables, operaciones, ternarios, llamadas a funciones.</p>
+
+                    <div data-code-module="fase3_jsx:0"></div>
+
+                    <h3>Renderizar listas con .map()</h3>
+                    <div data-code-module="fase3_jsx:1"></div>
+
+                    <div class="alert alert-important">
+                        <strong>La prop <code>key</code> es obligatoria</strong> cuando renderizas listas. React la usa para identificar cada elemento y actualizar solo lo que cambio. Usa un ID unico, nunca el indice del array.
+                    </div>
+
+                    <h3>Componentes anidados: composicion</h3>
+                    <div data-code-module="fase3_jsx:2"></div>
+
+                    <div class="exercise-block">
+                        <span class="exercise-tag">Ejercicio practico</span>
+                        <h4>Crea un componente <code>CultivoCard</code></h4>
+                        <p>Recibe un objeto <code>cultivo</code> con propiedades <code>nombre</code>, <code>tipo</code> y <code>ciclo_dias</code>. Muestra los datos y un badge de color segun el tipo (Café = marron, Maiz = amarillo, Frutales = verde).</p>
+                    </div>
+
+                    <button class="btn-complete" data-section="jsx">Marcar como completado</button>
+                </div>
+            </section>
+
+            <section id="estado" class="section">
+                <div class="card">
+                    <div class="section-header">
+                        <span class="section-num">04</span>
+                        <div>
+                            <h2>Estado con useState y useEffect</h2>
+                            <p class="section-desc">Datos que cambian en el tiempo y efectos secundarios controlados.</p>
+                        </div>
+                    </div>
+
+                    <h3>useState: datos reactivos</h3>
+                    <p>Cuando el estado cambia, React re-renderiza el componente automaticamente. No necesitas manipular el DOM manualmente.</p>
+
+                    <div data-code-module="fase3_estado:0"></div>
+
+                    <h3>useEffect: sincronizar con el mundo exterior</h3>
+                    <p>Se ejecuta despues del render. Ideal para consumir APIs, suscripciones, timers.</p>
+
+                    <div data-code-module="fase3_estado:1"></div>
+
+                    <div class="alert alert-warning">
+                        <strong>Array de dependencias vacio <code>[]</code>:</strong> significa "ejecutar solo una vez, al montar el componente". Si lo omites, el efecto se ejecuta en CADA render, causando un loop infinito de peticiones a la API.
+                    </div>
+
+                    <h3>Simulador: useState en accion</h3>
+                    <div class="simulator" id="sim-estado">
+                        <div class="sim-estado-demo">
+                            <div class="estado-display">
+                                <span class="estado-label">Estado actual:</span>
+                                <span id="sim-estado-valor" class="estado-valor">0</span>
+                            </div>
+                            <div class="estado-controls">
+                                <button id="sim-estado-add" class="btn-sim">+ Agregar finca</button>
+                                <button id="sim-estado-reset" class="btn-sim btn-sim-danger">Reiniciar</button>
+                            </div>
+                            <div class="estado-list" id="sim-estado-lista"></div>
+                        </div>
+                        <div class="sim-code">
+                            <div class="sim-label">Codigo equivalente:</div>
+                            <pre><code id="sim-estado-code" class="language-jsx"></code></pre>
+                        </div>
+                    </div>
+
+                    <button class="btn-complete" data-section="estado">Marcar como completado</button>
+                </div>
+            </section>
+
+            <section id="apis" class="section">
+                <div class="card">
+                    <div class="section-header">
+                        <span class="section-num">05</span>
+                        <div>
+                            <h2>Consumo de APIs con Fetch</h2>
+                            <p class="section-desc">Patron loading/error/empty state para consumo robusto de APIs.</p>
+                        </div>
+                    </div>
+
+                    <h3>Custom Hook: useApi</h3>
+                    <p>Encapsulamos la logica de consumo para reutilizarla en todos los componentes.</p>
+
+                    <div data-code-module="fase3_apis:0"></div>
+
+                    <h3>Tres estados, tres vistas</h3>
+                    <div class="state-grid">
+                        <div class="state-card state-loading">
+                            <div class="state-icon">&#9203;</div>
+                            <h4>Loading</h4>
+                            <pre><code class="language-jsx">if (loading)
+  return &lt;Spinner /&gt;</code></pre>
+                            <p>El usuario sabe que algo pasa. Nunca dejes la pantalla en blanco.</p>
+                        </div>
+                        <div class="state-card state-error">
+                            <div class="state-icon">&#9888;</div>
+                            <h4>Error</h4>
+                            <pre><code class="language-jsx">if (error)
+  return &lt;ErrorBox
+    mensaje={error}
+    onRetry={refetch}
+  /&gt;</code></pre>
+                            <p>Muestra el error y ofrece reintentar. El usuario no debe sentirse atrapado.</p>
+                        </div>
+                        <div class="state-card state-empty">
+                            <div class="state-icon">&#128196;</div>
+                            <h4>Empty</h4>
+                            <pre><code class="language-jsx">if (data.length === 0)
+  return &lt;EmptyState
+    mensaje="Sin fincas"
+    action="Crear"
+  /&gt;</code></pre>
+                            <p>Lista vacia no es error. Ofrece una accion clara: crear, importar, etc.</p>
+                        </div>
+                    </div>
+
+                    <h3>Servicio API centralizado</h3>
+                    <div data-code-module="fase3_apis:1"></div>
+
+                    <div class="alert alert-tip">
+                        <strong>Patron centralizado:</strong> Todas las llamadas a la API pasan por <code>request()</code>. Si necesitas cambiar la URL base, agregar autenticacion o manejar tokens, lo haces en UN solo lugar.
+                    </div>
+
+                    <button class="btn-complete" data-section="apis">Marcar como completado</button>
+                </div>
+            </section>
+
+            <section id="crud" class="section">
+                <div class="card">
+                    <div class="section-header">
+                        <span class="section-num">06</span>
+                        <div>
+                            <h2>CRUD Frontend: Fincas, Cultivos y la Relacion N:M</h2>
+                            <p class="section-desc">Construccion paso a paso del frontend que consume la API del dominio Finca-Cultivo.</p>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-important">
+                        <strong>Regla pedagogica N:M:</strong> Cada vez que veas la relacion muchos a muchos, recuerda: <strong>NO basta una llave foranea simple</strong>. Una FK en Finca apuntando a Cultivo solo permitiria UN cultivo por finca. Una FK en Cultivo apuntando a Finca solo permitiria UNA finca por cultivo. La tabla intermedia <code>FincaCultivo</code> resuelve ambos problemas y ademas almacena atributos propios de la relacion (area, fecha, temporada).
+                    </div>
+
+                    <h3>6.1 Tabla interactiva de Fincas</h3>
+                    <div data-code-module="fase3_crud:0"></div>
+
+                    <h3>6.2 Tabla de Cultivos</h3>
+                    <div data-code-module="fase3_crud:1"></div>
+
+                    <h3>6.3 Formulario de Asociacion (el componente clave N:M)</h3>
+                    <div class="alert alert-info">
+                        <strong>Aqui es donde la N:M cobra vida:</strong> El usuario elige una Finca, un Cultivo, y llena los atributos propios de la relacion (area, fecha, temporada). Esto NO se puede hacer con una simple lista: la tabla intermedia <code>FincaCultivo</code> tiene datos propios que no pertenecen ni a Finca ni a Cultivo.
+                    </div>
+
+                    <div data-code-module="fase3_crud:2"></div>
+
+                    <h3>6.4 Vista de Detalle de Finca (sus cultivos con atributos propios)</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-file">src/components/FincaDetalle.jsx</span>
+                            <button class="copy-btn" data-copy="code-crud-4">Copiar</button>
+                        </div>
+                        <pre><code class="language-jsx" id="code-crud-4">import { useState, useEffect } from 'react'
+import { api } from '../services/api'
+
+function FincaDetalle({ fincaId, onVolver }) {
+  const [finca, setFinca] = useState(null)
+  const [cultivosAsociados, setCultivosAsociados] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [filtroEstado, setFiltroEstado] = useState('todos')
+
+  useEffect(() =&gt; {
+    Promise.all([
+      api.fincas.getById(fincaId),
+      api.fincaCultivo.getByFinca(fincaId)
+    ])
+      .then(([f, cultivos]) =&gt; { setFinca(f); setCultivosAsociados(cultivos) })
+      .catch(console.error)
+      .finally(() =&gt; setLoading(false))
+  }, [fincaId])
+
+  const cultivosFiltrados = filtroEstado === 'todos'
+    ? cultivosAsociados
+    : cultivosAsociados.filter(c =&gt; c.estado === filtroEstado)
+
+  if (loading) return &lt;div className="spinner"&gt;Cargando detalle...&lt;/div&gt;
+  if (!finca) return &lt;div className="error-box"&gt;Finca no encontrada&lt;/div&gt;
+
+  return (
+    &lt;div className="finca-detalle"&gt;
+      &lt;button onClick={onVolver} className="btn-back"&gt;← Volver&lt;/button&gt;
+
+      &lt;div className="finca-header"&gt;
+        &lt;h2&gt;{finca.nombre}&lt;/h2&gt;
+        &lt;p&gt;{finca.propietario} — {finca.vereda}, {finca.municipio}&lt;/p&gt;
+        &lt;p&gt;{finca.hectareas} hectareas en total&lt;/p&gt;
+      &lt;/div&gt;
+
+      &lt;div className="filtro-bar"&gt;
+        &lt;span&gt;Filtrar:&lt;/span&gt;
+        {['todos', 'activo', 'cosechado'].map(est =&gt; (
+          &lt;button key={est}
+            className={`filtro-btn ${filtroEstado === est ? 'active' : ''}`}
+            onClick={() =&gt; setFiltroEstado(est)}&gt;
+            {est === 'todos' ? 'Todos' : est.charAt(0).toUpperCase() + est.slice(1)}
+          &lt;/button&gt;
+        ))}
+      &lt;/div&gt;
+
+      &lt;h3&gt;Cultivos asociados ({cultivosFiltrados.length})&lt;/h3&gt;
+
+      {cultivosFiltrados.length === 0 ? (
+        &lt;div className="empty-state"&gt;
+          Esta finca no tiene cultivos {filtroEstado !== 'todos' ? filtroEstado : 'registrados'}.
+        &lt;/div&gt;
+      ) : (
+        &lt;div className="cultivos-grid"&gt;
+          {cultivosFiltrados.map(fc =&gt; (
+            &lt;div key={`${fc.finca_id}-${fc.cultivo_id}`} className="cultivo-card"&gt;
+              &lt;div className="cultivo-card-header"&gt;
+                &lt;h4&gt;{fc.cultivo_nombre}&lt;/h4&gt;
+                &lt;span className={`badge badge-${fc.estado}`}&gt;{fc.estado}&lt;/span&gt;
+              &lt;/div&gt;
+              &lt;div className="cultivo-card-body"&gt;
+                &lt;p&gt;&lt;strong&gt;Area:&lt;/strong&gt; {fc.area_sembrada_ha} ha&lt;/p&gt;
+                &lt;p&gt;&lt;strong&gt;Siembra:&lt;/strong&gt; {fc.fecha_siembra}&lt;/p&gt;
+                &lt;p&gt;&lt;strong&gt;Temporada:&lt;/strong&gt; {fc.temporada}&lt;/p&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+          ))}
+        &lt;/div&gt;
+      )}
+    &lt;/div&gt;
+  )
+}
+
+export default FincaDetalle</code></pre>
+                    </div>
+
+                    <div class="alert alert-important">
+                        <strong>Nota los atributos propios:</strong> En el detalle NO solo mostramos el nombre del cultivo. Mostramos <code>area_sembrada_ha</code>, <code>fecha_siembra</code> y <code>temporada</code> — datos que viven en la tabla intermedia <code>FincaCultivo</code>, no en Cultivo. Esto es exactamente lo que justifica la tabla intermedia.
+                    </div>
+
+                    <h3>Simulador: CRUD N:M interactivo</h3>
+                    <div class="simulator" id="sim-crud">
+                        <div class="sim-crud-layout">
+                            <div class="sim-crud-panel">
+                                <h4>Fincas</h4>
+                                <div id="sim-crud-fincas" class="sim-crud-list"></div>
+                            </div>
+                            <div class="sim-crud-panel">
+                                <h4>Asociar (N:M)</h4>
+                                <form id="sim-crud-form" class="sim-crud-form">
+                                    <select id="sim-crud-finca"><option value="">Finca...</option></select>
+                                    <select id="sim-crud-cultivo"><option value="">Cultivo...</option></select>
+                                    <input type="number" id="sim-crud-area" placeholder="Area (ha)" step="0.1" min="0.1">
+                                    <input type="date" id="sim-crud-fecha">
+                                    <select id="sim-crud-temporada">
+                                        <option value="seca">Seca</option>
+                                        <option value="lluvia">Lluvia</option>
+                                    </select>
+                                    <select id="sim-crud-estado">
+                                        <option value="activo">Activo</option>
+                                        <option value="cosechado">Cosechado</option>
+                                    </select>
+                                    <button type="submit" class="btn-sim">Asociar</button>
+                                </form>
+                            </div>
+                            <div class="sim-crud-panel">
+                                <h4>Detalle de Finca</h4>
+                                <div id="sim-crud-detalle" class="sim-crud-detalle">
+                                    <p class="sim-empty">Selecciona una finca para ver sus cultivos</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-complete" data-section="crud">Marcar como completado</button>
+                </div>
+            </section>
+
+            <section id="ux" class="section">
+                <div class="card">
+                    <div class="section-header">
+                        <span class="section-num">07</span>
+                        <div>
+                            <h2>UX: Visualizar N:M en la Interfaz</h2>
+                            <p class="section-desc">Por que mostrar una relacion N:M con atributos propios es distinto a una simple lista, y como hacerlo claro para usuarios con baja alfabetizacion digital.</p>
+                        </div>
+                    </div>
+
+                    <h3>El problema: la N:M es invisible para el usuario</h3>
+                    <p>El usuario final no sabe que existe una tabla intermedia. Solo ve "la finca tiene cultivos". Pero como desarrolladores, debemos decidir <strong>COMO</strong> mostrar esa relacion para que sea clara y util.</p>
+
+                    <div class="grid-2-cols">
+                        <div class="ux-comparison ux-bad">
+                            <h4>&#10060; Mal: Lista plana</h4>
+                            <div class="ux-example">
+                                <p><strong>Finca El Porvenir:</strong></p>
+                                <ul>
+                                    <li>Cafe</li>
+                                    <li>Maiz</li>
+                                    <li>Frutales</li>
+                                </ul>
+                            </div>
+                            <p class="ux-problem">Problema: El usuario no sabe CUANTA tierra tiene cada cultivo, ni cuando se sembro, ni en que temporada. Se perdieron los atributos propios de la relacion.</p>
+                        </div>
+                        <div class="ux-comparison ux-good">
+                            <h4>&#9989; Bien: Cards con contexto</h4>
+                            <div class="ux-example">
+                                <p><strong>Finca El Porvenir (8.5 ha):</strong></p>
+                                <div class="ux-card-demo">
+                                    <div class="ux-mini-card">
+                                        <strong>Cafe</strong>
+                                        <span>3.2 ha | Mar 2026 | Lluvia</span>
+                                    </div>
+                                    <div class="ux-mini-card">
+                                        <strong>Maiz</strong>
+                                        <span>2.0 ha | Ene 2026 | Seca</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="ux-solution">Cada card muestra el cultivo + los datos de ESA siembra especifica (area, fecha, temporada). El usuario entiende la relacion completa.</p>
+                        </div>
+                    </div>
+
+                    <h3>Principios UX para usuarios campesinos</h3>
+                    <div class="ux-principles">
+                        <div class="ux-principle">
+                            <span class="ux-icon">&#128065;</span>
+                            <div>
+                                <h4>Visibilidad del estado</h4>
+                                <p>Muestra siempre que esta pasando: "Cargando...", "Guardado", "Error al conectar". El usuario no debe adivinar.</p>
+                            </div>
+                        </div>
+                        <div class="ux-principle">
+                            <span class="ux-icon">&#128172;</span>
+                            <div>
+                                <h4>Lenguaje del usuario</h4>
+                                <p>No digas "registro creado exitosamente". Di "Cultivo asociado a la finca". Usa terminos del dominio agricola, no tecnicismos de base de datos.</p>
+                            </div>
+                        </div>
+                        <div class="ux-principle">
+                            <span class="ux-icon">&#9888;</span>
+                            <div>
+                                <h4>Prevencion de errores</h4>
+                                <p>Antes de eliminar, pregunta "¿Eliminar esta asociacion?". Antes de asociar un cultivo que ya existe, muestra advertencia. Los selects ayudan mas que los inputs de texto libre.</p>
+                            </div>
+                        </div>
+                        <div class="ux-principle">
+                            <span class="ux-icon">&#128241;</span>
+                            <div>
+                                <h4>Diseno mobile-first</h4>
+                                <p>Muchos usuarios acceden desde celular. Las tablas deben ser scrollables horizontalmente. Los formularios deben ser de una sola columna en movil. Los botones deben ser grandes y faciles de tocar.</p>
+                            </div>
+                        </div>
+                        <div class="ux-principle">
+                            <span class="ux-icon">&#128260;</span>
+                            <div>
+                                <h4>Tolerancia a conexion intermitente</h4>
+                                <p>Si la conexion falla, no pierdas los datos del formulario. Guarda borradores en localStorage. Muestra un mensaje claro y permite reintentar sin re-llenar todo.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Patron recomendado: Vista Jerarquica</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-file">Estructura de navegacion UX</span>
+                        </div>
+                        <pre><code class="language-text">Lista de Fincas (tabla simple)
+  └── Click en "Ver cultivos" → Detalle de Finca
+        ├── Info de la finca (nombre, propietario, hectareas)
+        ├── Filtros: Todos | Activos | Cosechados
+        └── Grid de cards de cultivos asociados
+              ├── Nombre del cultivo
+              ├── Area sembrada (atributo de la relacion)
+              ├── Fecha de siembra (atributo de la relacion)
+              ├── Temporada (atributo de la relacion)
+              └── Estado: activo/cosechado (atributo de la relacion)</code></pre>
+                    </div>
+
+                    <div class="alert alert-tip">
+                        <strong>La clave:</strong> El usuario nunca ve la tabla <code>FincaCultivo</code> directamente. Ve "los cultivos de esta finca" con sus datos especificos. La N:M se traduce a una experiencia natural: "esta finca tiene estos cultivos, cada uno con su area y fecha".
+                    </div>
+
+                    <button class="btn-complete" data-section="ux">Marcar como completado</button>
+                </div>
+            </section>
+
+            <section id="reto" class="section">
+                <div class="card">
+                    <div class="section-header">
+                        <span class="section-num">08</span>
+                        <div>
+                            <h2>Reto Final: Filtro de Cultivos Activos</h2>
+                            <p class="section-desc">Aplica todo lo aprendido agregando un filtro funcional al detalle de finca.</p>
+                        </div>
+                    </div>
+
+                    <div class="reto-brief">
+                        <h3>Brief del reto</h3>
+                        <p>Modifica el componente <code>FincaDetalle.jsx</code> para que tenga un filtro que muestre solo los cultivos con estado "activo" por finca. El filtro debe:</p>
+                        <ul>
+                            <li>Tener tres opciones: "Todos", "Activos", "Cosechados"</li>
+                            <li>Actualizar la lista sin recargar la pagina</li>
+                            <li>Mostrar un contador de resultados filtrados</li>
+                            <li>Manejar el caso de lista vacia despues del filtro</li>
+                        </ul>
+                    </div>
+
+                    <h3>Pista: el patron ya lo viste</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-file">Ayuda: estructura del filtro</span>
+                        </div>
+                        <pre><code class="language-jsx">const [filtroEstado, setFiltroEstado] = useState('todos')
+
+const cultivosFiltrados = cultivosAsociados.filter(fc =&gt; {
+  if (filtroEstado === 'todos') return true
+  return fc.estado === filtroEstado
+})
+
+// En el JSX:
+&lt;div className="filtro-bar"&gt;
+  {['todos', 'activo', 'cosechado'].map(est =&gt; (
+    &lt;button
+      key={est}
+      className={`filtro-btn ${filtroEstado === est ? 'active' : ''}`}
+      onClick={() =&gt; setFiltroEstado(est)}
+      &gt;
+      {est === 'todos' ? 'Todos' : est}
+    &lt;/button&gt;
+  ))}
+&lt;/div&gt;
+
+&lt;p&gt;Mostrando {cultivosFiltrados.length} de {cultivosAsociados.length} cultivos&lt;/p&gt;</code></pre>
+                    </div>
+
+                    <h3>Simulador del Reto: Filtro en accion</h3>
+                    <div class="simulator" id="sim-filtro">
+                        <div class="sim-filtro-layout">
+                            <div class="sim-filtro-selector">
+                                <label>Elige una finca:
+                                    <select id="sim-filtro-finca">
+                                        <option value="1">El Porvenir</option>
+                                        <option value="2">Los Alamos</option>
+                                        <option value="3">La Esperanza</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div id="sim-filtro-detalle" class="sim-filtro-detalle"></div>
+                        </div>
+                        <div class="sim-code">
+                            <div class="sim-label">Codigo React equivalente:</div>
+                            <pre><code id="sim-filtro-code" class="language-jsx"></code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Criterios de evaluacion</h3>
+                    <div class="criterios-grid">
+                        <div class="criterio-card">
+                            <span class="criterio-check">&#9745;</span>
+                            <div>
+                                <strong>Funcional</strong>
+                                <p>El filtro cambia la lista dinamicamente sin recargar</p>
+                            </div>
+                        </div>
+                        <div class="criterio-card">
+                            <span class="criterio-check">&#9745;</span>
+                            <div>
+                                <strong>Estados</strong>
+                                <p>Muestra loading, error y empty state correctamente</p>
+                            </div>
+                        </div>
+                        <div class="criterio-card">
+                            <span class="criterio-check">&#9745;</span>
+                            <div>
+                                <strong>Atributos propios</strong>
+                                <p>Cada cultivo muestra area, fecha y temporada (no solo nombre)</p>
+                            </div>
+                        </div>
+                        <div class="criterio-card">
+                            <span class="criterio-check">&#9745;</span>
+                            <div>
+                                <strong>UX clara</strong>
+                                <p>El usuario entiende que son cultivos asociados, no una lista plana</p>
+                            </div>
+                        </div>
+                        <div class="criterio-card">
+                            <span class="criterio-check">&#9745;</span>
+                            <div>
+                                <strong>Responsive</strong>
+                                <p>Funciona en movil (360px), tablet (768px) y desktop (1024px+)</p>
+                            </div>
+                        </div>
+                        <div class="criterio-card">
+                            <span class="criterio-check">&#9745;</span>
+                            <div>
+                                <strong>Solo hooks</strong>
+                                <p>Componentes funcionales con useState/useEffect, sin clases</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reto-entrega">
+                        <h3>Que entregar</h3>
+                        <ol>
+                            <li>Repositorio Git con el proyecto Vite completo</li>
+                            <li>Capturas de pantalla del detalle de finca con los tres estados del filtro</li>
+                            <li>Video corto (2 min) mostrando el flujo: listar fincas → ver detalle → filtrar cultivos</li>
+                            <li>Documento explicando por que la tabla intermedia <code>FincaCultivo</code> es necesaria (no basta con FK simple)</li>
+                        </ol>
+                    </div>
+
+                    <div class="alert alert-success">
+                        <strong>Felicitaciones:</strong> Si llegaste hasta aqui, ya sabes consumir APIs desde React, manejar estados de carga/error/vacio, y lo mas importante: representar una relacion N:M con atributos propios en la interfaz de usuario. Esto es exactamente lo que necesita un aprendiz ADSO para construir aplicaciones web completas.
+                    </div>
+
+                    <button class="btn-complete" data-section="reto">Marcar como completado</button>
+                </div>
+            </section>
+
+        <!-- DESCARGA -->
+            <section id="descargar" class="section">
+                <div class="card">
+                    <div class="section-header">
+                        <span class="section-num">&#128229;</span>
+                        <div>
+                            <h2>Descargar y ejecutar el proyecto</h2>
+                            <p class="section-desc">Pon en marcha el frontend React + la API FastAPI para probar el CRUD N:M.</p>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-important">
+                        <strong>Dos servidores necesarios:</strong> La app React necesita la API FastAPI corriendo en <code>http://localhost:8009</code>. Inicia la API primero, luego el frontend.
+                    </div>
+
+                    <h3>&#128221; Requisitos</h3>
+                    <ul>
+                        <li>Node.js 18+ instalado</li>
+                        <li>Python 3.11+ instalado (para la API FastAPI)</li>
+                        <li>PostgreSQL 16+ (opcional, la API usa SQLite por defecto)</li>
+                    </ul>
+
+                    <h3 class="mt-4">&#128736; Paso 1: Iniciar la API FastAPI</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-file">Terminal 1</span>
+                            <button class="copy-btn" data-copy="descargar-api">Copiar</button>
+                        </div>
+                        <pre><code class="language-bash" id="descargar-api"># Ve a la carpeta de la API (desde la guia FastAPI)
+cd ../Guia\ FastApi/recursos/codigo-ejemplo
+
+python -m venv venv
+.\venv\Scripts\activate
+pip install -r requirements.txt
+
+# Inicia el servidor
+uvicorn main:app --reload --port 8009</code></pre>
+                    </div>
+
+                    <h3 class="mt-4">&#128736; Paso 2: Iniciar el frontend React</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-file">Terminal 2</span>
+                            <button class="copy-btn" data-copy="descargar-frontend">Copiar</button>
+                        </div>
+                        <pre><code class="language-bash" id="descargar-frontend">cd recursos/codigo-ejemplo
+npm install
+npm run dev</code></pre>
+                    </div>
+
+                    <h3 class="mt-4">&#128279; Comandos cURL para probar el CRUD N:M</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-file">Terminal 3 — Pruebas</span>
+                            <button class="copy-btn" data-copy="descargar-curl">Copiar</button>
+                        </div>
+                        <pre><code class="language-bash" id="descargar-curl"># 1. Crear una finca
+curl -X POST http://localhost:8009/api/fincas \
+  -H "Content-Type: application/json" \
+  -d "{\"nombre\":\"El Porvenir\",\"propietario\":\"Jose Rodriguez\",\"vereda\":\"La Mesa\",\"municipio\":\"Velez\",\"hectareas\":8.5}"
+
+# 2. Crear un cultivo
+curl -X POST http://localhost:8009/api/cultivos \
+  -H "Content-Type: application/json" \
+  -d "{\"nombre\":\"Cafe\",\"tipo\":\"Cafe\",\"ciclo_dias\":180}"
+
+# 3. Asociar cultivo a finca (N:M)
+curl -X POST http://localhost:8009/api/finca-cultivo \
+  -H "Content-Type: application/json" \
+  -d "{\"finca_id\":1,\"cultivo_id\":1,\"area_sembrada_ha\":3.2,\"fecha_siembra\":\"2026-03-15\",\"temporada\":\"lluvia\"}"
+
+# 4. Listar cultivos de una finca
+curl http://localhost:8009/api/fincas/1/cultivos</code></pre>
+                    </div>
+
+                    <div class="alert alert-tip">
+                        <strong>Pro-tip:</strong> Abre <code>http://localhost:8009/docs</code> para ver la documentacion Swagger de la API. Todos los endpoints, esquemas y ejemplos estan ahi automaticamente.
+                    </div>
+
+                    <div class="alert alert-success">
+                        <strong>&#127912; Hot Reload:</strong> Tanto Vite (frontend) como Uvicorn --reload (backend) recargan automaticamente cuando guardas cambios. No necesitas reiniciar nada.
+                    </div>
+
+                    <h3 class="mt-4">&#128736; Script de setup automatico</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-file">setup.ps1 — PowerShell</span>
+                            <button class="copy-btn" data-copy="descargar-setup">Copiar</button>
+                        </div>
+                        <pre><code id="descargar-setup" class="language-powershell"># setup.ps1 — Configura todo automaticamente
+Write-Host "=== Configurando Frontend React + API FastAPI ===" -ForegroundColor Cyan
+
+# 1. Verificar Node.js
+$nodeVer = node --version
+Write-Host "Node.js: $nodeVer" -ForegroundColor Green
+
+# 2. Instalar dependencias
+Write-Host "Instalando dependencias..." -ForegroundColor Yellow
+npm install
+
+# 3. Iniciar servidor
+Write-Host "Iniciando servidor de desarrollo..." -ForegroundColor Yellow
+npm run dev</code></pre>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="site-footer">
+            <p>SENA ADSO 2026 &mdash; Guia Interactiva Fase 3: Consumo de APIs con React</p>
+            <p>Dominio: Finca &harr; Cultivo (N:M) via tabla intermedia FincaCultivo</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-jsx.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+    <script src="js/modules-content-fase3.js"></script>
+    <script src="js/code-renderer.js"></script>
+    <script src="js/fase3-app.js"></script>
+</body>
+</html>
