@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guía Interactiva React & Spring Boot API | SENA ADSO</title>
-    <meta name="description" content="Guía interactiva paso a paso para dominar React 19/18, Vite, Mobile-First, Menú Hamburguesa, Modales, Toasts, CRUD N:M y consumo de endpoints Spring Boot.">
+    <title>Guía Interactiva React 19 & Spring Boot 3.5 API | SENA ADSO</title>
+    <meta name="description" content="Guía interactiva completa y detallada: React 19, Vite, Mobile-First, Menú Hamburguesa, Modales, Toasts, CRUD N:M, Optimistic UI, JWT Auth, Vite Proxy, Paginación Spring Boot, Subida de Fotos y Error Boundaries.">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,7 +32,7 @@
                 <span class="logo-icon">⚛️</span>
                 <span class="logo-text">Guía <span class="highlight">React</span></span>
             </a>
-            <span class="sidebar-version">v2.0 ADSO</span>
+            <span class="sidebar-version">v3.0 ADSO</span>
         </div>
 
         <div class="sidebar-user">
@@ -100,15 +100,37 @@
             </div>
 
             <div class="nav-section">
-                <span class="nav-section-title">Fase 4: IA & Laboratorio</span>
+                <span class="nav-section-title">Fase 4: React 19 & Seguridad</span>
+                <a href="#m-react19" class="nav-item" data-module="m-react19">
+                    <span class="nav-icon">⚡</span><span class="nav-text">M10: Actions & Optimistic</span><span class="nav-badge">10</span>
+                </a>
+                <a href="#m-auth" class="nav-item" data-module="m-auth">
+                    <span class="nav-icon">🔒</span><span class="nav-text">M11: Autenticación JWT</span><span class="nav-badge">11</span>
+                </a>
+                <a href="#m-vite-proxy" class="nav-item" data-module="m-vite-proxy">
+                    <span class="nav-icon">🛡️</span><span class="nav-text">M12: Vite Proxy vs CORS</span><span class="nav-badge">12</span>
+                </a>
+                <a href="#m-ux-avanzada" class="nav-item" data-module="m-ux-avanzada">
+                    <span class="nav-icon">✨</span><span class="nav-text">M13: UX (Debounce/Skeletons)</span><span class="nav-badge">13</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <span class="nav-section-title">Fase 5: Herramientas & Portafolio</span>
                 <a href="#m-ia" class="nav-item" data-module="m-ia">
-                    <span class="nav-icon">🤖</span><span class="nav-text">M10: Desarrollo con IA</span><span class="nav-badge">10</span>
+                    <span class="nav-icon">🤖</span><span class="nav-text">M14: Desarrollo con IA</span><span class="nav-badge">14</span>
                 </a>
                 <a href="#m-simuladores" class="nav-item" data-module="m-simuladores">
-                    <span class="nav-icon">⚡</span><span class="nav-text">M11: Simuladores en Vivo</span><span class="nav-badge">11</span>
+                    <span class="nav-icon">🕹️</span><span class="nav-text">M15: Laboratorio Vivo (12 Labs)</span><span class="nav-badge">15</span>
+                </a>
+                <a href="#m-glosario" class="nav-item" data-module="m-glosario">
+                    <span class="nav-icon">📖</span><span class="nav-text">Diccionario Técnico</span>
+                </a>
+                <a href="#m-portafolio" class="nav-item" data-module="m-portafolio">
+                    <span class="nav-icon">📄</span><span class="nav-text">Portafolio ADSO</span>
                 </a>
                 <a href="#m-retos" class="nav-item" data-module="m-retos">
-                    <span class="nav-icon">🎯</span><span class="nav-text">M12: Retos y Portafolio</span><span class="nav-badge">12</span>
+                    <span class="nav-icon">🎯</span><span class="nav-text">Retos y Certificación</span>
                 </a>
             </div>
         </nav>
@@ -125,7 +147,7 @@
                     <span>🍃</span> Backend: <code>localhost:31026</code>
                 </div>
                 <button class="btn btn-sm btn-primary" onclick="APP.navigateTo('m-simuladores')">
-                    ⚡ Simuladores
+                    ⚡ Laboratorio Vivo (12 Labs)
                 </button>
             </div>
         </header>
@@ -138,14 +160,14 @@
             <section id="welcome" class="page-section active">
                 <div class="hero-section section-card glass-panel">
                     <div class="badge">Guía Oficial de Aprendizaje · SENA ADSO 2026</div>
-                    <h1 class="title">Aprende <span class="gradient-text">React</span> Consumiendo <span class="gradient-spring">Spring Boot</span></h1>
+                    <h1 class="title">Aprende <span class="gradient-text">React 19</span> Consumiendo <span class="gradient-spring">Spring Boot 3.5</span></h1>
                     <p class="subtitle">
-                        Ruta práctica para aprendices: domina React desde las bases (Vite, Hola Mundo, JSX, Layouts, Menú Hamburguesa) hasta la construcción de aplicaciones profesionales con Modales, Mensajes Flotantes (Toasts), Tablas responsivas, CRUD completo N:M y desarrollo asistido por IA.
+                        Ruta de aprendizaje profesional para aprendices: domina React desde las bases (Vite, Hola Mundo, JSX, Layouts, Menú Hamburguesa) hasta la construcción de aplicaciones completas con Modales, Mensajes Flotantes (Toasts), Tablas responsivas, CRUD completo N:M, Optimistic UI, Autenticación JWT, Paginación Spring Boot, Subida Multipart de Archivos, Error Boundaries y desarrollo asistido por IA.
                     </p>
                     <div class="hero-stats">
-                        <div class="stat"><span class="stat-number">12</span><span class="stat-label">Módulos</span></div>
-                        <div class="stat"><span class="stat-number">6</span><span class="stat-label">Simuladores</span></div>
-                        <div class="stat"><span class="stat-number">31026</span><span class="stat-label">Puerto API Spring</span></div>
+                        <div class="stat"><span class="stat-number">15</span><span class="stat-label">Módulos</span></div>
+                        <div class="stat"><span class="stat-number">12</span><span class="stat-label">Simuladores</span></div>
+                        <div class="stat"><span class="stat-number">31026</span><span class="stat-label">Puerto Spring</span></div>
                         <div class="stat"><span class="stat-number">40h</span><span class="stat-label">Práctica ADSO</span></div>
                     </div>
                 </div>
@@ -158,17 +180,17 @@
                     <div class="alert-box spring-bridge">
                         <h4>🍃 Conexión Directa con Guía Spring (Puerto 31026)</h4>
                         <p>
-                            El backend expone recursos REST sobre el dominio <strong>Fincas y Cultivos (Santander, Colombia)</strong>. Tu frontend React en Vite (puerto 5173 / 3000) consumirá los endpoints usando Fetch/Axios, gestionando CORS, estados de carga y validaciones.
+                            El backend expone recursos REST sobre el dominio <strong>Fincas y Cultivos (Santander, Colombia)</strong>. Tu frontend React en Vite consumirá los endpoints usando Fetch/Axios, gestionando CORS, estados de carga, paginación y validaciones.
                         </p>
                     </div>
 
                     <div class="tech-grid">
-                        <div class="tech-card glass-panel-inner"><span class="tech-icon">⚛️</span><h4>React 19 / 18</h4><p>Biblioteca UI Declarativa</p></div>
-                        <div class="tech-card glass-panel-inner"><span class="tech-icon">⚡</span><h4>Vite</h4><p>Bundler ultrarrápido & HMR</p></div>
+                        <div class="tech-card glass-panel-inner"><span class="tech-icon">⚛️</span><h4>React 19</h4><p>Actions & Optimistic UI</p></div>
+                        <div class="tech-card glass-panel-inner"><span class="tech-icon">⚡</span><h4>Vite 5+</h4><p>Proxy & HMR instantáneo</p></div>
                         <div class="tech-card glass-panel-inner"><span class="tech-icon">📱</span><h4>Mobile-First</h4><p>Diseño fluido desde 320px</p></div>
                         <div class="tech-card glass-panel-inner"><span class="tech-icon">🍃</span><h4>Spring Boot 3.5</h4><p>API REST (Puerto 31026)</p></div>
-                        <div class="tech-card glass-panel-inner"><span class="tech-icon">🗄️</span><h4>PostgreSQL</h4><p>Base de datos (Puerto 5434)</p></div>
-                        <div class="tech-card glass-panel-inner"><span class="tech-icon">🤖</span><h4>Copilot / IA</h4><p>Asistente de código</p></div>
+                        <div class="tech-card glass-panel-inner"><span class="tech-icon">🔒</span><h4>JWT Auth</h4><p>Seguridad Zero-Trust</p></div>
+                        <div class="tech-card glass-panel-inner"><span class="tech-icon">📄</span><h4>Spring Pageable</h4><p>Paginación eficiente</p></div>
                     </div>
                 </div>
             </section>
@@ -181,16 +203,8 @@
                     <div class="module-hero">
                         <span class="module-badge">Módulo 1</span>
                         <h1>Fundamentos y Mentalidad React</h1>
-                        <p>Comprende por qué React transformó el desarrollo web: del DOM manual imperativo al Virtual DOM declarativo.</p>
+                        <p>Comprende la arquitectura interna: Virtual DOM, algoritmo Diffing (Reconciliation) y el motor React Fiber.</p>
                     </div>
-
-                    <div class="alert-box">
-                        <h3>💡 El Paradigma Declarativo</h3>
-                        <p>
-                            En JavaScript Vanilla le dices al navegador <em>"busca este botón, cámbiale el texto, busca este div, agrégale esta clase..."</em>. En React describes <strong>cómo debe lucir la pantalla según los datos (estado)</strong>, y React actualiza únicamente los nodos modificados.
-                        </p>
-                    </div>
-
                     <div id="code-m-reflexion"></div>
                     <button class="btn btn-primary mark-complete-btn" data-module="m-reflexion">Marcar Módulo 1 Completado (+250 XP)</button>
                 </div>
@@ -204,7 +218,7 @@
                     <div class="module-hero">
                         <span class="module-badge">Módulo 2</span>
                         <h1>Tu Primer Proyecto React: Setup con Vite</h1>
-                        <p>Configuración paso a paso con Node.js, Vite, variables de entorno para Spring Boot y arranque en desarrollo.</p>
+                        <p>Configuración paso a paso con Node.js, Vite, variables de entorno para Spring Boot y estructura de carpetas estándar.</p>
                     </div>
                     <div id="code-m-entorno"></div>
                     <button class="btn btn-primary mark-complete-btn" data-module="m-entorno">Marcar Módulo 2 Completado (+250 XP)</button>
@@ -219,7 +233,7 @@
                     <div class="module-hero">
                         <span class="module-badge">Módulo 3</span>
                         <h1>Anatomía de Componentes y Props</h1>
-                        <p>Aprende a dividir la interfaz en piezas reutilizables y a pasar datos mediante Props y desestructuración.</p>
+                        <p>Aprende a dividir la interfaz en componentes funcionales puros, desestructuración de props y renderizado de listas con key.</p>
                     </div>
                     <div id="code-m-componentes"></div>
                     <button class="btn btn-primary mark-complete-btn" data-module="m-componentes">Marcar Módulo 3 Completado (+250 XP)</button>
@@ -246,14 +260,14 @@
             </section>
 
             <!-- ═══════════════════════════════════════════════════════════ -->
-            <!-- 5. ESTADO CON USESTATE Y FORMULARIOS -->
+            <!-- 5. ESTADO CON USESTATE, USEREF Y FORMULARIOS -->
             <!-- ═══════════════════════════════════════════════════════════ -->
             <section id="m-estado" class="page-section">
                 <div class="section-card glass-panel">
                     <div class="module-hero">
                         <span class="module-badge">Módulo 5</span>
-                        <h1>Estado Interactivo con useState y Formularios</h1>
-                        <p>Aprende a gestionar datos que cambian en el tiempo, inmutabilidad con spread operator (...) y validación de formularios.</p>
+                        <h1>Estado Interactivo con useState, useRef y Formularios</h1>
+                        <p>Inmutabilidad, State Batching automático, acceso seguro al DOM con useRef y validación de formularios.</p>
                     </div>
                     <div id="code-m-estado"></div>
                     <button class="btn btn-primary mark-complete-btn" data-module="m-estado">Marcar Módulo 5 Completado (+250 XP)</button>
@@ -268,7 +282,7 @@
                     <div class="module-hero">
                         <span class="module-badge">Módulo 6</span>
                         <h1>Efectos Secundarios y Ciclo de Vida con useEffect</h1>
-                        <p>Domina el arreglo de dependencias, la función de limpieza (cleanup) y la sincronización con sistemas externos.</p>
+                        <p>Montaje, actualización, dependencias y función de limpieza (cleanup) con AbortController contra fugas de memoria.</p>
                     </div>
                     <div id="code-m-efectos"></div>
 
@@ -287,12 +301,15 @@
                     <div class="module-hero">
                         <span class="module-badge">Módulo 7</span>
                         <h1>Conexión con Spring Boot: Consumo de APIs REST</h1>
-                        <p>Aprende a conectar React con tu backend Spring Boot (puerto 31026), resolver errores de CORS y manejar los 4 estados UI.</p>
+                        <p>Cliente HTTP centralizado, manejo de errores estándar RFC 7807 (ProblemDetails) y Custom Hook useFetch.</p>
                     </div>
                     <div id="code-m-api"></div>
 
                     <h3>⚡ Probar Peticiones Fetch a Spring Boot:</h3>
                     <div class="sim-api-container"></div>
+
+                    <h3 class="mt-6">📄 Paginación con Spring Data JPA Pageable:</h3>
+                    <div class="sim-pagination-container"></div>
 
                     <button class="btn btn-primary mark-complete-btn" data-module="m-api">Marcar Módulo 7 Completado (+250 XP)</button>
                 </div>
@@ -305,10 +322,14 @@
                 <div class="section-card glass-panel">
                     <div class="module-hero">
                         <span class="module-badge">Módulo 8</span>
-                        <h1>Catálogo de Componentes UI Esenciales (Modales, Toasts y Tablas)</h1>
-                        <p>Crea componentes reutilizables de alta calidad: modales accesibles, notificaciones flotantes y tablas que se adaptan a móviles.</p>
+                        <h1>Catálogo de Componentes UI Esenciales (Modales, Toasts, Tablas y Fotos)</h1>
+                        <p>Crea modales accesibles con focus trap, notificaciones flotantes (Toasts) y subida multipart de fotos con preview.</p>
                     </div>
                     <div id="code-m-componentes-ui"></div>
+
+                    <h3>📷 Subida Multipart de Fotos de Fincas:</h3>
+                    <div class="sim-upload-container"></div>
+
                     <button class="btn btn-primary mark-complete-btn" data-module="m-componentes-ui">Marcar Módulo 8 Completado (+250 XP)</button>
                 </div>
             </section>
@@ -333,61 +354,179 @@
             </section>
 
             <!-- ═══════════════════════════════════════════════════════════ -->
-            <!-- 10. DESARROLLO ASISTIDO CON INTELIGENCIA ARTIFICIAL -->
+            <!-- 10. REACT 19 ACTIONS Y OPTIMISTIC UI -->
             <!-- ═══════════════════════════════════════════════════════════ -->
-            <section id="m-ia" class="page-section">
+            <section id="m-react19" class="page-section">
                 <div class="section-card glass-panel">
                     <div class="module-hero">
                         <span class="module-badge">Módulo 10</span>
-                        <h1>Potenciando el Desarrollo con Inteligencia Artificial</h1>
-                        <p>Aprende a usar la IA (Claude, Copilot, ChatGPT, Antigravity) como copiloto para generar componentes, custom hooks, pruebas y depuración.</p>
+                        <h1>Novedades de React 19: Actions y Optimistic UI (0 ms)</h1>
+                        <p>Actualiza la interfaz instantáneamente mientras Spring Boot procesa en segundo plano mediante useOptimistic y useActionState.</p>
                     </div>
-                    <div id="code-m-ia"></div>
-                    <button class="btn btn-primary mark-complete-btn" data-module="m-ia">Marcar Módulo 10 Completado (+250 XP)</button>
+                    <div id="code-m-react19"></div>
+
+                    <h3>⚡ Probar Optimistic UI en Tiempo Real (con opción de reversión):</h3>
+                    <div class="sim-optimistic-container"></div>
+
+                    <button class="btn btn-primary mark-complete-btn" data-module="m-react19">Marcar Módulo 10 Completado (+250 XP)</button>
                 </div>
             </section>
 
             <!-- ═══════════════════════════════════════════════════════════ -->
-            <!-- 11. SIMULADORES INTERACTIVOS Y LABORATORIO -->
+            <!-- 11. AUTENTICACIÓN JWT Y RUTAS PROTEGIDAS -->
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <section id="m-auth" class="page-section">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Módulo 11</span>
+                        <h1>Autenticación JWT y Rutas Protegidas</h1>
+                        <p>Inicia sesión contra /api/auth/login, almacena el token JWT de forma segura y protege las rutas según roles de usuario.</p>
+                    </div>
+                    <div id="code-m-auth"></div>
+
+                    <h3>🔒 Probar Login JWT y Control de Roles:</h3>
+                    <div class="sim-auth-container"></div>
+
+                    <button class="btn btn-primary mark-complete-btn" data-module="m-auth">Marcar Módulo 11 Completado (+250 XP)</button>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <!-- 12. VITE PROXY VS CORS -->
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <section id="m-vite-proxy" class="page-section">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Módulo 12</span>
+                        <h1>Vite Proxy: La Solución Definitiva a CORS</h1>
+                        <p>Configura vite.config.js para redirigir peticiones /api hacia Spring Boot en desarrollo sin fricciones de seguridad.</p>
+                    </div>
+                    <div id="code-m-vite-proxy"></div>
+                    <button class="btn btn-primary mark-complete-btn" data-module="m-vite-proxy">Marcar Módulo 12 Completado (+250 XP)</button>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <!-- 13. UX AVANZADA: SKELETONS, DEBOUNCE Y ERROR BOUNDARIES -->
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <section id="m-ux-avanzada" class="page-section">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Módulo 13</span>
+                        <h1>UX Avanzada: Skeletons, Búsqueda con Debounce y Error Boundaries</h1>
+                        <p>Elimina saltos visuales (CLS), optimiza peticiones de búsqueda al 90% y aísla fallos de renderizado.</p>
+                    </div>
+                    <div id="code-m-ux-avanzada"></div>
+
+                    <h3>🔍 Comparador de Búsqueda con Debounce:</h3>
+                    <div class="sim-debounce-container"></div>
+
+                    <h3 class="mt-6">🛡️ Simulador de Error Boundary & Resiliencia UI:</h3>
+                    <div class="sim-error-boundary-container"></div>
+
+                    <button class="btn btn-primary mark-complete-btn" data-module="m-ux-avanzada">Marcar Módulo 13 Completado (+250 XP)</button>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <!-- 14. DESARROLLO CON IA -->
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <section id="m-ia" class="page-section">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Módulo 14</span>
+                        <h1>Potenciando el Desarrollo con Inteligencia Artificial</h1>
+                        <p>Aprende a usar la IA como copiloto para generar componentes, custom hooks, pruebas y depuración.</p>
+                    </div>
+                    <div id="code-m-ia"></div>
+                    <button class="btn btn-primary mark-complete-btn" data-module="m-ia">Marcar Módulo 14 Completado (+250 XP)</button>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <!-- 15. LABORATORIO DE SIMULADORES -->
             <!-- ═══════════════════════════════════════════════════════════ -->
             <section id="m-simuladores" class="page-section">
                 <div class="section-card glass-panel">
                     <div class="module-hero">
-                        <span class="module-badge">Módulo 11</span>
-                        <h1>Laboratorio de Simuladores Interactivos</h1>
+                        <span class="module-badge">Módulo 15</span>
+                        <h1>Laboratorio Vivo de 12 Simuladores Interactivos</h1>
                         <p>Experimenta y pon a prueba tus conocimientos en tiempo real con todas las herramientas interactivas.</p>
                     </div>
 
-                    <h3>1. Spring Boot Endpoint Tester</h3>
+                    <h3>1. Spring Boot Endpoint Tester (GET, POST, PUT, DELETE)</h3>
                     <div class="sim-api-container"></div>
 
-                    <h3 class="mt-6">2. CRUD Studio con Modales y Toasts</h3>
+                    <h3 class="mt-6">2. CRUD Studio con Modales y Toasts Flotantes</h3>
                     <div class="sim-crud-container"></div>
 
-                    <h3 class="mt-6">3. Simulador Mobile-First y Menú Hamburguesa</h3>
+                    <h3 class="mt-6">3. React 19 Optimistic UI vs Latencia de Red (0 ms)</h3>
+                    <div class="sim-optimistic-container"></div>
+
+                    <h3 class="mt-6">4. Comparador de Búsqueda con Debounce (300 ms)</h3>
+                    <div class="sim-debounce-container"></div>
+
+                    <h3 class="mt-6">5. Autenticación JWT y Control de Roles (/api/auth/login)</h3>
+                    <div class="sim-auth-container"></div>
+
+                    <h3 class="mt-6">6. Paginación y Ordenamiento Spring Boot Pageable</h3>
+                    <div class="sim-pagination-container"></div>
+
+                    <h3 class="mt-6">7. Subida Multipart de Fotos de Fincas</h3>
+                    <div class="sim-upload-container"></div>
+
+                    <h3 class="mt-6">8. Error Boundary & Contingencia de Fallos</h3>
+                    <div class="sim-error-boundary-container"></div>
+
+                    <h3 class="mt-6">9. Simulador Mobile-First y Menú Hamburguesa</h3>
                     <div class="sim-layout-container"></div>
 
-                    <h3 class="mt-6">4. Visualizador de useState & useEffect</h3>
+                    <h3 class="mt-6">10. Visualizador de useState & useEffect con Cleanup</h3>
                     <div class="sim-hooks-container"></div>
 
-                    <h3 class="mt-6">5. JSX Live Compiler</h3>
+                    <h3 class="mt-6">11. JSX Live Compiler & Virtual DOM</h3>
                     <div class="sim-routes-container"></div>
 
-                    <h3 class="mt-6">6. Props Simulator</h3>
-                    <div class="sim-jinja-container"></div>
-
-                    <h3 class="mt-6">7. Quiz y Debugger de Errores Comunes</h3>
+                    <h3 class="mt-6">12. Quiz y Debugger de Errores Comunes</h3>
                     <div class="sim-quiz-container"></div>
                 </div>
             </section>
 
             <!-- ═══════════════════════════════════════════════════════════ -->
-            <!-- 12. RETOS Y PROYECTO PORTAFOLIO -->
+            <!-- DICCIONARIO TÉCNICO INTERACTIVO -->
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <section id="m-glosario" class="page-section">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Diccionario</span>
+                        <h1>📖 Diccionario Técnico Interactivo React & Spring Boot</h1>
+                        <p>Buscador de términos esenciales: Virtual DOM, Actions, JWT, CORS, Optimistic UI, Suspense, HMR, Pageable y Zero-Trust.</p>
+                    </div>
+                    <div id="glossary-container"></div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <!-- PORTAFOLIO DE EVIDENCIAS ADSO -->
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <section id="m-portafolio" class="page-section">
+                <div class="section-card glass-panel">
+                    <div class="module-hero">
+                        <span class="module-badge">Portafolio</span>
+                        <h1>📄 Portafolio y Bitácora de Evidencias ADSO</h1>
+                        <p>Genera y descarga tu informe oficial en Markdown con los módulos y prácticas completadas para entregar al instructor.</p>
+                    </div>
+                    <div id="portfolio-container"></div>
+                </div>
+            </section>
+
+            <!-- ═══════════════════════════════════════════════════════════ -->
+            <!-- RETOS Y CERTIFICACIÓN -->
             <!-- ═══════════════════════════════════════════════════════════ -->
             <section id="m-retos" class="page-section">
                 <div class="section-card glass-panel">
                     <div class="module-hero">
-                        <span class="module-badge">Módulo 12</span>
+                        <span class="module-badge">Retos</span>
                         <h1>Retos Prácticos y Proyecto Portafolio</h1>
                         <p>Demuestra tu autonomía desarrollando funcionalidades completas para tu portafolio profesional.</p>
                     </div>
@@ -399,11 +538,6 @@
                             <p style="color:var(--text-muted);font-size:0.875rem;margin:0.5rem 0;">
                                 Construye una página en React que consulte <code>GET /api/cultivos</code> a Spring Boot y permita filtrar en tiempo real entre cultivos permanentes (café, guayaba) y transitorios (frijol, maíz).
                             </p>
-                            <ul>
-                                <li>Renderizado con <code>.map()</code> y keys únicas.</li>
-                                <li>Botones de filtro con estado activo.</li>
-                                <li>Badge condicional de color según el tipo.</li>
-                            </ul>
                         </div>
 
                         <div class="glass-panel-inner">
@@ -412,19 +546,14 @@
                             <p style="color:var(--text-muted);font-size:0.875rem;margin:0.5rem 0;">
                                 Implementa el formulario de siembra que consuma <code>POST /api/finca-cultivos</code> enviando el <code>fincaId</code>, <code>cultivoId</code> y las hectáreas sembradas con validación y Toasts de éxito.
                             </p>
-                            <ul>
-                                <li>Selector desplegable de fincas y cultivos.</li>
-                                <li>Modal con confirmación de siembra.</li>
-                                <li>Mensaje flotante (Toast) tras guardar.</li>
-                            </ul>
                         </div>
                     </div>
 
                     <div class="glass-panel-inner mt-6" style="border:1px solid rgba(56,189,248,0.3);">
                         <span class="badge">🎯 Proyecto Integrador Final</span>
-                        <h3>AgroManager Colombia: Frontend React + Backend Spring Boot</h3>
+                        <h3>AgroManager Colombia: Frontend React 19 + Backend Spring Boot</h3>
                         <p style="color:var(--text-muted);margin:0.5rem 0 1rem;">
-                            Tu proyecto final listo para entrevista laboral o sustentación SENA: una SPA completa con Layout responsive, Menú Hamburguesa, CRUD de Fincas y Cultivos, Modales de creación/edición, Toasts flotantes y manejo de errores HTTP.
+                            Tu proyecto final listo para entrevista laboral o sustentación SENA: una SPA completa con Layout responsive, Menú Hamburguesa, CRUD de Fincas y Cultivos, Modales de creación/edición, Toasts flotantes, Optimistic UI, Paginación y autenticación JWT.
                         </p>
                         <button class="btn btn-primary" onclick="APP.navigateTo('m-crud')">Ir al CRUD Completo &rarr;</button>
                     </div>
@@ -434,7 +563,7 @@
             </section>
 
             <footer class="footer">
-                <p>SENA ADSO 2026 · Guía React con Consumo de Spring Boot API · Hecho para aprendices del Oriente Colombiano</p>
+                <p>SENA ADSO 2026 · Guía React 19 con Consumo de Spring Boot API · Hecho para aprendices del Oriente Colombiano</p>
             </footer>
         </main>
     </div>
@@ -449,8 +578,8 @@
                 <h2 style="font-family:'Space Grotesk',sans-serif;margin-bottom:0.5rem;">¡Felicitaciones, Desarrollador React!</h2>
                 <p style="color:var(--text-muted);margin-bottom:1.5rem;">Has completado todos los módulos de la guía y estás listo para conectar aplicaciones React con backend Spring Boot.</p>
                 <div class="hero-stats">
-                    <div class="stat"><span class="stat-number" id="modal-modules">12</span><span class="stat-label">Módulos</span></div>
-                    <div class="stat"><span class="stat-number" id="modal-xp">2500</span><span class="stat-label">XP</span></div>
+                    <div class="stat"><span class="stat-number" id="modal-modules">15</span><span class="stat-label">Módulos</span></div>
+                    <div class="stat"><span class="stat-number" id="modal-xp">3500</span><span class="stat-label">XP</span></div>
                     <div class="stat"><span class="stat-number" id="modal-level">5</span><span class="stat-label">Nivel</span></div>
                 </div>
             </div>
@@ -476,6 +605,8 @@
     <script src="js/gamification.js"></script>
     <script src="js/modules-content.js"></script>
     <script src="js/simulators.js"></script>
+    <script src="js/glossary.js"></script>
+    <script src="js/portfolio-exporter.js"></script>
     <script src="js/code-renderer.js"></script>
     <script src="js/main.js"></script>
 </body>

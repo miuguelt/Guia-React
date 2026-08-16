@@ -1,13 +1,22 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  server: { port: 5173, proxy: { '/api': 'http://localhost:8080' } },
+  server: { 
+    port: 5173, 
+    proxy: { 
+      '/api': {
+        target: 'http://localhost:31026', // Puerto de Spring Boot
+        changeOrigin: true,
+        secure: false
+      }
+    } 
+  },
   test: {
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/test/setup.js',
   }
-})
+});

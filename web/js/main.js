@@ -1,6 +1,6 @@
 /**
- * APP CONTROLLER - Guia React & Spring Boot API (SENA ADSO)
- * Manejo de navegación SPA, menú hamburguesa accesible, Toasts flotantes, Modales, Búsqueda y Gamificación.
+ * APP CONTROLLER - Guia React 19 & Spring Boot API (SENA ADSO)
+ * Manejo de navegación SPA, menú hamburguesa accesible, Toasts flotantes, Modales, Glosario, Portafolio y Gamificación.
  */
 
 const APP = {
@@ -16,8 +16,14 @@ const APP = {
         'm-api',
         'm-componentes-ui',
         'm-crud',
+        'm-react19',
+        'm-auth',
+        'm-vite-proxy',
+        'm-ux-avanzada',
         'm-ia',
         'm-simuladores',
+        'm-glosario',
+        'm-portafolio',
         'm-retos'
     ],
 
@@ -35,6 +41,12 @@ const APP = {
         }
         if (window.SIMULATORS) {
             window.SIMULATORS.init();
+        }
+        if (window.Glossary) {
+            window.Glossary.render();
+        }
+        if (window.PortfolioExporter) {
+            window.PortfolioExporter.render();
         }
     },
 
@@ -57,7 +69,6 @@ const APP = {
         if (toggle) toggle.addEventListener('click', toggleSidebar);
         if (backdrop) backdrop.addEventListener('click', toggleSidebar);
 
-        // Cerrar con tecla Escape
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && sidebar && sidebar.classList.contains('open')) {
                 toggleSidebar();
@@ -105,10 +116,16 @@ const APP = {
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
-            // Renderizar bloques de código asociados si aún no están listos
             if (window.CodeRenderer) {
                 window.CodeRenderer.renderModule(pageId);
                 if (window.Prism) Prism.highlightAll();
+            }
+
+            if (pageId === 'm-glosario' && window.Glossary) {
+                window.Glossary.render();
+            }
+            if (pageId === 'm-portafolio' && window.PortfolioExporter) {
+                window.PortfolioExporter.render();
             }
         }
     },
@@ -129,18 +146,24 @@ const APP = {
         if (breadcrumb) {
             const names = {
                 'welcome': 'Inicio y Hoja de Ruta',
-                'm-reflexion': 'M1: Fundamentos y Mentalidad',
+                'm-reflexion': 'M1: Mentalidad React',
                 'm-entorno': 'M2: Setup y Hola Mundo',
                 'm-componentes': 'M3: Componentes y Props',
                 'm-layout': 'M4: Layout y Menú Hamburguesa',
                 'm-estado': 'M5: Estado y Formularios',
                 'm-efectos': 'M6: Efectos y Ciclo de Vida',
                 'm-api': 'M7: Consumo Spring Boot',
-                'm-componentes-ui': 'M8: Componentes UI (Modales/Toasts)',
+                'm-componentes-ui': 'M8: Modales, Toasts y Tablas',
                 'm-crud': 'M9: CRUD Fincas y Cultivos',
-                'm-ia': 'M10: Desarrollo con IA',
-                'm-simuladores': 'M11: Simuladores en Vivo',
-                'm-retos': 'M12: Retos y Portafolio'
+                'm-react19': 'M10: React 19 Actions & Optimistic',
+                'm-auth': 'M11: Autenticación JWT',
+                'm-vite-proxy': 'M12: Vite Proxy vs CORS',
+                'm-ux-avanzada': 'M13: UX Avanzada (Debounce/Skeletons)',
+                'm-ia': 'M14: Desarrollo con IA',
+                'm-simuladores': 'M15: Laboratorio de Simuladores',
+                'm-glosario': 'Diccionario Técnico',
+                'm-portafolio': 'Portafolio de Evidencias ADSO',
+                'm-retos': 'Retos y Certificación'
             };
             breadcrumb.textContent = names[pageId] || pageId;
         }
@@ -183,7 +206,7 @@ const APP = {
 
     checkVictory() {
         if (!window.GAMIFICATION) return;
-        const totalModules = 10;
+        const totalModules = 12;
         const completed = window.GAMIFICATION.completed ? window.GAMIFICATION.completed.length : 0;
         if (completed >= totalModules) {
             setTimeout(() => this.showVictoryModal(), 500);
@@ -213,7 +236,6 @@ const APP = {
         }
     },
 
-    // ── TOAST NOTIFICATIONS ENGINE ──
     initToastContainer() {
         if (!document.getElementById('toast-container')) {
             const container = document.createElement('div');
@@ -229,12 +251,7 @@ const APP = {
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
 
-        const icons = {
-            success: '✅',
-            error: '❌',
-            warning: '⚠️',
-            info: 'ℹ️'
-        };
+        const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
 
         toast.innerHTML = `
             <span class="toast-icon">${icons[type] || 'ℹ️'}</span>
@@ -253,7 +270,6 @@ const APP = {
 
         if (closeBtn) closeBtn.onclick = removeToast;
         container.appendChild(toast);
-
         setTimeout(removeToast, duration);
     },
 
